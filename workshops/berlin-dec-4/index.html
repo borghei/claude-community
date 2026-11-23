@@ -37,6 +37,10 @@
   .prompt p{margin:0;padding-right:70px}
   .copy{position:absolute;top:14px;right:14px;border:1px solid var(--dark);background:none;border-radius:999px;padding:4px 12px;font:600 12px inherit;cursor:pointer}
   .note{color:var(--grey);font-size:15px}
+  .codebar{margin-top:10px;font-size:14px;color:var(--grey);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .mini{font:600 13px inherit;font-family:inherit;border:1.5px solid var(--dark);background:none;color:var(--dark);border-radius:999px;padding:5px 11px;cursor:pointer;text-decoration:none}
+  .mini.ok{background:var(--dark);color:var(--cream)}
+  .steps li{margin:6px 0}
   footer{padding:32px 24px;border-top:1px solid #e2dfd6;color:var(--grey);font-size:14px}
   a{color:var(--dark)}
 </style>
@@ -49,28 +53,58 @@
 </div></header>
 
 <main><div class="wrap">
+  <h2 class="serif">Get ready</h2>
+  <ol class="steps">
+    <li>Open <a href="https://claude.ai">claude.ai</a> on your laptop and sign in. A paid plan works best, free accounts are welcome too.</li>
+    <li>Screenshots help Claude see the app. Mac: Cmd+Shift+4. Windows: Win+Shift+S. Then paste into the chat with Cmd/Ctrl+V.</li>
+    <li>Anything in [brackets] in a prompt: replace it with your own words.</li>
+  </ol>
+
   <h2 class="serif">Pick your product</h2>
   <div class="cards">
     <div class="card">
       <div class="emoji">🥕</div>
       <h3 class="serif">Fridgy</h3>
       <p class="pitch">"Your AI kitchen co-pilot. Tell it what's in your fridge, get dinner."</p>
-      <div><a class="btn primary" href="fridgy/">Open the app</a><a class="btn ghost" href="https://github.com/borghei/claude-community/tree/main/workshops/berlin-dec-4/fridgy">Get the code</a></div>
+      <div><a class="btn primary" href="fridgy/">Open the app</a></div>
+      <div class="codebar"><span>Get the code:</span>
+        <a class="mini" href="fridgy/index.html" download="fridgy.html">Download</a>
+        <button class="mini" data-copy-code="fridgy/code.txt">Copy code</button>
+        <button class="mini" data-copy-text="Read the full code of this app and help me improve it: https://borghei.github.io/claude-community/workshops/berlin-dec-4/fridgy/code.txt">Link for Claude</button>
+      </div>
     </div>
     <div class="card">
       <div class="emoji">🧭</div>
       <h3 class="serif">Wanderly</h3>
       <p class="pitch">"Plan your dream trip in seconds with AI."</p>
-      <div><a class="btn primary" href="wanderly/">Open the app</a><a class="btn ghost" href="https://github.com/borghei/claude-community/tree/main/workshops/berlin-dec-4/wanderly">Get the code</a></div>
+      <div><a class="btn primary" href="wanderly/">Open the app</a></div>
+      <div class="codebar"><span>Get the code:</span>
+        <a class="mini" href="wanderly/index.html" download="wanderly.html">Download</a>
+        <button class="mini" data-copy-code="wanderly/code.txt">Copy code</button>
+        <button class="mini" data-copy-text="Read the full code of this app and help me improve it: https://borghei.github.io/claude-community/workshops/berlin-dec-4/wanderly/code.txt">Link for Claude</button>
+      </div>
     </div>
     <div class="card">
       <div class="emoji">🫶</div>
       <h3 class="serif">Huddle</h3>
       <p class="pitch">"Plan anything with your friends. Dinners, trips, birthdays, finally organised."</p>
-      <div><a class="btn primary" href="huddle/">Open the app</a><a class="btn ghost" href="https://github.com/borghei/claude-community/tree/main/workshops/berlin-dec-4/huddle">Get the code</a></div>
+      <div><a class="btn primary" href="huddle/">Open the app</a></div>
+      <div class="codebar"><span>Get the code:</span>
+        <a class="mini" href="huddle/index.html" download="huddle.html">Download</a>
+        <button class="mini" data-copy-code="huddle/code.txt">Copy code</button>
+        <button class="mini" data-copy-text="Read the full code of this app and help me improve it: https://borghei.github.io/claude-community/workshops/berlin-dec-4/huddle/code.txt">Link for Claude</button>
+      </div>
     </div>
   </div>
   <p class="note">All three apps are fictional and made on purpose for this workshop. Nothing you type is sent anywhere.</p>
+  <h2 class="serif">Getting the code (no GitHub account needed)</h2>
+  <p>Each app is a single file. Use whichever is easiest for you:</p>
+  <ul class="steps">
+    <li><b>Download</b>: saves the app as one .html file. Open it in your browser, or drag it into Claude or Claude Code.</li>
+    <li><b>Copy code</b>: copies the whole code. Paste it straight into a Claude chat.</li>
+    <li><b>Link for Claude</b>: copies a ready-made message with a link to the code. Paste it into Claude, or any AI tool that can open links.</li>
+  </ul>
+
 
   <h2 class="serif">Five questions before you build</h2>
   <ol class="q">
@@ -91,10 +125,10 @@
   <h2 class="serif">Prompts to steal</h2>
   <div class="prompt"><h4>Find the user</h4><p>Act as an experienced product manager. Here is an app: [paste screenshots or describe it]. Ask me 5 questions, one at a time, to find out who this app is really for and what problem it solves for them.</p><button class="copy">Copy</button></div>
   <div class="prompt"><h4>Be the user</h4><p>Play [the person we picked]. I will interview you about how you handle this problem today. Answer honestly, including what annoys you.</p><button class="copy">Copy</button></div>
-  <div class="prompt"><h4>Keep, cut, change</h4><p>Here are the app's features: [list]. Our user is [one sentence]. Sort every feature into Must have, Nice to have and Won't have, with one reason each. Be ruthless: at most 2 must-haves.</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>Must, nice, not now</h4><p>Here are the app's features: [list]. Our user is [one sentence]. List every feature you can see, then sort them into Must have, Nice to have and Not now, with one reason each. At most 2 must-haves.</p><button class="copy">Copy</button></div>
   <div class="prompt"><h4>First 10 seconds</h4><p>A friend just sent you this app. Here is a screenshot. Think out loud: what do you understand in the first 10 seconds, what would you tap, and what would make you close it?</p><button class="copy">Copy</button></div>
   <div class="prompt"><h4>Prototype it</h4><p>Build a simple clickable prototype of only this flow: [your flow]. One main action per screen, plain language, and a 2-step onboarding with a skip button.</p><button class="copy">Copy</button></div>
-  <div class="prompt"><h4>Rebuild it (Claude Code)</h4><p>This folder has the app's index.html. Turn it into a focused app for [user] doing [job]. Remove everything else, make that job the home screen, and add a skippable 2-step onboarding.</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>Rebuild it (Claude Code)</h4><p>Download the app's code into a folder and open it in Claude Code. Then: Turn it into a focused app for [user] doing [job]. Remove everything else, make that job the home screen, and add a skippable 2-step onboarding.</p><button class="copy">Copy</button></div>
 
   <h2 class="serif">Demo time: 2 minutes per team</h2>
   <p>At the end, every team demos what they made. A paper sketch, a prototype or a rebuilt app all count.</p>
@@ -110,9 +144,11 @@
 
 <footer><div class="wrap">Claude Community Berlin · Claude Workshop x The Delta · 4 December 2026</div></footer>
 <script>
-document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText(b.previousElementSibling.innerText);b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500);}catch(e){}
-}));
+function flash(b,t){const o=b.textContent;b.textContent=t;b.classList.add('ok');setTimeout(()=>{b.textContent=o;b.classList.remove('ok')},1600)}
+async function copy(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();const r=document.execCommand('copy');a.remove();return r}}
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{if(await copy(b.previousElementSibling.innerText))flash(b,'Copied')}));
+document.querySelectorAll('[data-copy-text]').forEach(b=>b.addEventListener('click',async()=>{if(await copy(b.dataset.copyText))flash(b,'Copied')}));
+document.querySelectorAll('[data-copy-code]').forEach(b=>b.addEventListener('click',async()=>{try{const r=await fetch(b.dataset.copyCode);const t=await r.text();if(await copy(t))flash(b,'Copied')}catch(e){flash(b,'Use Download')}}));
 </script>
 </body>
 </html>

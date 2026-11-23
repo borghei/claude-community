@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fridgy - Your AI kitchen co-pilot</title>
+<style>
+:root{
+  --bg:#f3fbef; --card:#fff; --ink:#1d2b22; --mute:#6b7d70; --line:#dcebd5;
+  --coral:#ff5a4d; --lime:#b9f04c; --violet:#6c4cff; --sun:#ffc83d; --mint:#2fcf9a;
+  --r:20px; --font:ui-rounded,"SF Pro Rounded","Avenir Next Rounded","Nunito","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--ink);font-size:16px;
+  background-image:radial-gradient(circle at 90% -10%,#e0d9ff 0,transparent 35%),radial-gradient(circle at -5% 20%,#d9ffe9 0,transparent 30%);background-attachment:fixed}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3{margin:0;letter-spacing:-.02em}
+h1{font-size:34px;font-weight:900} h2{font-size:26px;font-weight:900} h3{font-size:18px;font-weight:800}
+p{margin:.4em 0}
+.muted{color:var(--mute)} .small{font-size:13px}
+.banner{background:linear-gradient(90deg,var(--violet),#ff5aa8);color:#fff;text-align:center;padding:9px 12px;font-weight:700;font-size:14px}
+.banner b{background:#fff;color:var(--violet);border-radius:99px;padding:2px 10px;margin-left:8px;cursor:pointer}
+.app{display:grid;grid-template-columns:250px 1fr;max-width:1280px;margin:0 auto;gap:24px;padding:24px}
+nav{position:sticky;top:16px;align-self:start;background:var(--card);border-radius:var(--r);padding:14px;box-shadow:0 8px 30px #2fcf9a22;border:2px solid var(--line)}
+.logo{font-size:28px;font-weight:900;padding:4px 10px 12px;display:flex;align-items:center;gap:8px}
+.logo span{background:var(--lime);border-radius:12px;padding:0 8px}
+.nv{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:10px 12px;border-radius:14px;font-weight:700;cursor:pointer;text-align:left;font-size:15px}
+.nv:hover{background:#eef9e8} .nv.on{background:var(--ink);color:#fff}
+.nv i{font-style:normal;font-size:18px}
+.tag{font-size:10px;font-weight:900;background:var(--sun);color:#5a4200;border-radius:99px;padding:2px 7px;margin-left:auto}
+main{min-width:0}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.hero{background:linear-gradient(135deg,#1d2b22,#2c4a3a);color:#fff;border:0;position:relative;overflow:hidden}
+.hero p{color:#c9e8d3;max-width:560px}
+.hero:after{content:"🥕🧀🥚🍅";position:absolute;right:20px;top:10px;font-size:46px;letter-spacing:6px;opacity:.9}
+.btn{border:0;border-radius:99px;padding:13px 22px;font-weight:800;cursor:pointer;background:var(--coral);color:#fff;font-size:16px;box-shadow:0 4px 0 #c93a2f;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c93a2f}
+.btn.v{background:var(--violet);box-shadow:0 4px 0 #4a30c9}
+.btn.g{background:var(--mint);box-shadow:0 4px 0 #1a9c73;color:#06382a}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:none;border:2px solid var(--line)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+label{display:block;font-weight:800;font-size:14px;margin-bottom:5px}
+input[type=text],input[type=number],input[type=date],select{width:100%;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:#fbfffa}
+input:focus,select:focus{outline:3px solid #6c4cff44;border-color:var(--violet)}
+.form{display:grid;grid-template-columns:2fr 1fr 1.3fr 1.4fr auto;gap:12px;align-items:end}
+.err{background:#ffe9e6;color:#b3261e;border-radius:14px;padding:12px 14px;font-weight:700;margin:12px 0}
+.item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}
+.item .x{margin-left:auto;border:0;background:none;cursor:pointer;font-size:18px}
+.pill{display:inline-block;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:800;background:#eef9e8}
+.pill.red{background:#ffe1dd;color:#b3261e} .pill.y{background:#fff1c9;color:#7a5600} .pill.p{background:#ebe6ff;color:#4a30c9}
+.rc{cursor:pointer;transition:transform .15s,box-shadow .15s;padding:0;overflow:hidden}
+.rc:hover{transform:translateY(-3px);box-shadow:0 12px 24px #1d2b2218}
+.rc .top{height:96px;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#e6ffd1,#e8e1ff)}
+.rc .bd{padding:16px}
+.mk{position:fixed;inset:0;background:#0b1a1288;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;backdrop-filter:blur(4px)}
+.md{background:#fff;border-radius:28px;padding:28px;max-width:520px;width:100%;max-height:90vh;overflow:auto;position:relative}
+.md.wide{max-width:640px}
+.pro{text-align:center}
+.pro .big{font-size:56px}
+.pro .price{font-size:40px;font-weight:900;color:var(--violet)}
+.closer{position:absolute;right:14px;top:10px;border:0;background:none;color:#c5c5c5;font-size:12px;cursor:pointer}
+.nothanks{display:block;margin:12px auto 0;border:0;background:none;color:#a8b3aa;font-size:11px;cursor:pointer}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;font-weight:700;z-index:80}
+.ob{max-width:560px;margin:40px auto;padding:0 16px}
+.bar{height:10px;background:#dcebd5;border-radius:9px;overflow:hidden;margin:14px 0 22px}
+.bar div{height:100%;background:linear-gradient(90deg,var(--mint),var(--lime))}
+.ing{columns:2;font-size:14px;padding-left:18px}
+ol.steps li{margin:8px 0}
+.empty{text-align:center;color:var(--mute);padding:26px}
+.spin{display:inline-block;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.cal div{background:#f5faf2;border:2px dashed var(--line);border-radius:14px;min-height:90px;padding:8px;font-size:12px;font-weight:800}
+.big-n{font-size:64px;font-weight:900;color:var(--violet);line-height:1}
+@media(max-width:860px){
+  .app{grid-template-columns:1fr;padding:12px}
+  nav{position:static;display:flex;overflow-x:auto;gap:4px;padding:8px}
+  .logo{display:none} .nv{width:auto;white-space:nowrap;flex:none}
+  .form{grid-template-columns:1fr 1fr} .hero:after{display:none} h1{font-size:28px}
+  .cal{grid-template-columns:repeat(2,1fr)} .ing{columns:1}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+"use strict";
+/* ---------- fictional data ---------- */
+const RECIPES=[
+ {id:1,n:"Heritage Slow-Braised Ragu Lasagna Royale",e:"🍝",min:135,diet:["meat"],hype:98,
+  ing:["beef mince","pork mince","pancetta","lasagna sheets","tomato","red wine","onion","carrot","celery","garlic","milk","butter","flour","nutmeg","parmesan","mozzarella","bay leaf","thyme","olive oil","tomato paste","beef stock","basil","black pepper"],
+  steps:["Render the pancetta slowly for 15 minutes.","Sweat the soffritto, add both minces and brown in batches.","Deglaze with wine, add tomato, paste, stock and herbs.","Simmer the ragu for 90 minutes, stirring occasionally.","Make a bechamel with butter, flour and milk.","Layer sheets, ragu, bechamel and cheeses. Repeat four times.","Bake 40 minutes, rest 15 minutes before serving."]},
+ {id:2,n:"Saffron Seafood Paella for Eight",e:"🥘",min:105,diet:["pescatarian"],hype:96,
+  ing:["paella rice","saffron","prawns","mussels","squid","white fish","tomato","red pepper","peas","onion","garlic","fish stock","white wine","paprika","lemon","parsley","olive oil","salt"],
+  steps:["Toast the saffron and steep in warm stock.","Fry the sofrito until jammy.","Add rice and coat in oil.","Pour in stock, do not stir. Simmer 20 minutes.","Nestle in the seafood and finish on high heat for the socarrat."]},
+ {id:3,n:"Wild Mushroom Wellington",e:"🍄",min:95,diet:["vegetarian"],hype:94,
+  ing:["mushrooms","puff pastry","shallot","garlic","thyme","spinach","chestnuts","egg","breadcrumbs","mustard","butter","white wine","parsley","salt","pepper","olive oil"],
+  steps:["Chop and dry-fry the mushrooms until the water is gone.","Mix with chestnuts, herbs and breadcrumbs.","Wrap in pastry, brush with egg.","Chill 30 minutes, bake 40."]},
+ {id:9,n:"Chicken Tikka Masala from Scratch",e:"🍛",min:75,diet:["meat"],hype:91,
+  ing:["chicken","yoghurt","tomato","onion","garlic","ginger","cream","garam masala","cumin","turmeric","chili","coriander","rice","butter","lemon"],
+  steps:["Marinate the chicken for as long as you can (overnight is best).","Grill the chicken until charred.","Build the sauce: onion, spices, tomato, cream.","Combine and simmer 20 minutes."]},
+ {id:4,n:"Three-Bean Veggie Chili",e:"🌶️",min:50,diet:["vegan"],hype:88,
+  ing:["kidney beans","black beans","tomato","onion","bell pepper","garlic","cumin","paprika","chili","corn","lime"],
+  steps:["Soften onion, pepper and garlic.","Add spices, tomato and beans.","Simmer 35 minutes, finish with corn and lime."]},
+ {id:5,n:"Chickpea & Spinach Skillet",e:"🥬",min:20,diet:["vegan"],hype:71,
+  ing:["chickpeas","spinach","onion","garlic","tomato","cumin","olive oil"],
+  steps:["Fry onion and garlic.","Add cumin, tomato, chickpeas.","Wilt in spinach, season, serve."]},
+ {id:6,n:"Egg Fried Rice Express",e:"🍚",min:15,diet:["vegetarian"],hype:64,
+  ing:["rice","egg","spring onion","soy sauce","peas","carrot","garlic"],
+  steps:["Heat the pan until very hot.","Scramble the eggs, push aside.","Add cold rice, veg and soy. Toss 4 minutes."]},
+ {id:7,n:"Garlic Chili Spaghetti",e:"🍜",min:15,diet:["vegan"],hype:58,
+  ing:["spaghetti","garlic","chili","olive oil","parsley"],
+  steps:["Boil the pasta.","Warm garlic and chili in oil.","Toss together with a splash of pasta water."]},
+ {id:8,n:"Fridge-Raid Omelette",e:"🍳",min:10,diet:["vegetarian"],hype:52,
+  ing:["egg","cheese","tomato","onion","butter"],
+  steps:["Beat the eggs.","Cook gently in butter.","Fill with whatever is left, fold."]}
+];
+const CATS=["Dairy","Meat","Fish","Vegetables","Fruit","Grains","Condiments","Frozen","Leftovers","Other"];
+const QUIZ=[["Your ideal Friday night is...",["Hosting 12 people","Pasta in pyjamas","Trying a new cuisine"]],["Your knife skills are...",["Brigade-level","Fine","Plasters"]],["Salt?",["Pinch","Handful","What is salt"]]];
+const FEED=[["@nora.cooks","Made the Royale lasagna for my in-laws. Still in the kitchen. 🍝",214],["@tiny_wok","Rice. Egg. Joy. 🍚",87],["@chefmarcus_ish","Pairing a 2019 Grüner with leftover toast, ask me how",31]];
+const WINES=["a crisp Riesling","a bold Tempranillo","a playful Pet-Nat","sparkling water, honestly"];
+
+/* ---------- state (memory only) ---------- */
+const S={ob:0,ans:{},done:false,tab:"fridge",items:[],err:"",gen:false,paywalled:false,
+ settings:null,likes:{},synced:null,syncing:false,quiz:null,quizStep:0,coach:null,list:["Oat milk","Lemons"],showAdv:false,showLabs:false};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function modal(html,cls){const m=document.createElement("div");m.className="mk";m.id="modal";m.innerHTML='<div class="md '+(cls||"")+'">'+html+"</div>";document.body.appendChild(m)}
+function closeModal(){const m=$("modal");if(m)m.remove()}
+
+/* ---------- onboarding: 7 questions ---------- */
+const Q=[
+ {k:"name",t:"What should we call you?",type:"text",ph:"Your first name"},
+ {k:"hh",t:"How many mouths do you feed?",type:"number",ph:"e.g. 2"},
+ {k:"diet",t:"Dietary preference",type:"select",o:["Omnivore","Vegetarian","Vegan","Pescatarian","Gluten-free"]},
+ {k:"allergy",t:"Allergies & intolerances",type:"text",ph:"Nuts, shellfish, none..."},
+ {k:"skill",t:"Rate your cooking skill (1-10)",type:"range"},
+ {k:"m2",t:"Kitchen size in m²",type:"number",ph:"e.g. 9"},
+ {k:"chef",t:"Your favourite celebrity chef",type:"text",ph:"e.g. Chef Marguerite Bonnard"}
+];
+function renderOb(){
+  const q=Q[S.ob],v=S.ans[q.k]||"";let f;
+  if(q.type==="select")f='<select id="obv"><option value="">Choose...</option>'+q.o.map(o=>`<option ${v===o?"selected":""}>${o}</option>`).join("")+"</select>";
+  else if(q.type==="range")f=`<input id="obv" type="range" min="1" max="10" value="${v||5}" oninput="this.nextElementSibling.textContent=this.value" style="width:100%"><b style="font-size:30px">${v||5}</b>`;
+  else f=`<input id="obv" type="${q.type}" value="${esc(v)}" placeholder="${q.ph}">`;
+  $("root").innerHTML=`<div class="ob"><div class="logo"><span>🧊</span>Fridgy</div>
+  <div class="card"><div class="small muted">Step ${S.ob+1} of 7 · Calibrating your Culinary Intelligence Profile™</div>
+  <div class="bar"><div style="width:${(S.ob+1)/7*100}%"></div></div>
+  <h2 style="margin-bottom:16px">${q.t}</h2>${f}<div id="oberr" class="err" style="display:none">This field is mandatory for personalization.</div>
+  <div class="row" style="margin-top:22px">${S.ob>0?'<button class="btn ghost" onclick="obBack()">Back</button>':""}<button class="btn" style="margin-left:auto" onclick="obNext()">${S.ob===6?"Unleash Fridgy 🚀":"Continue"}</button></div></div></div>`;
+}
+function obNext(){const q=Q[S.ob],v=$("obv").value.trim();
+  if(!v){$("oberr").style.display="block";return}
+  S.ans[q.k]=v;if(S.ob===6){S.done=true;render()}else{S.ob++;renderOb()}}
+function obBack(){S.ans[Q[S.ob].k]=$("obv").value;S.ob--;renderOb()}
+
+/* ---------- shell ---------- */
+const NAV=[["fridge","🧊","My Fridge"],["discover","✨","Discover Recipes"],["plan","📅","Meal Plan Studio","NEW"],["coach","💪","Macro Coach AI","AI"],["list","🛒","Smart List"],["feed","🌍","Fridgy Feed"],["score","🏆","Fridge Score"],["wine","🍷","Pairing Lab","BETA"],["quiz","🧑‍🍳","Chef Persona"],["settings","⚙️","Settings"]];
+function render(){
+  if(!S.done){renderOb();return}
+  $("root").innerHTML=`<div class="banner">Your 7-day Pro trial is waiting! <b onclick="paywall()">Claim</b></div>
+  <div class="app"><nav><div class="logo"><span>🧊</span>Fridgy</div>${NAV.map(n=>`<button class="nv ${S.tab===n[0]?"on":""}" onclick="go('${n[0]}')"><i>${n[1]}</i>${n[2]}${n[3]?`<span class="tag">${n[3]}</span>`:""}</button>`).join("")}</nav>
+  <main>${VIEW[S.tab]()}</main></div>`;
+}
+function go(t){S.tab=t;S.err="";S.showAdv=false;S.showLabs=false;S.sub=null;render();scrollTo(0,0)}
+
+/* ---------- views ---------- */
+function daysLeft(d){return Math.round((new Date(d+"T00:00:00")-new Date(new Date().toDateString()))/864e5)}
+const VIEW={
+fridge(){
+  return `<div class="card hero"><h1>Hey ${esc(S.ans.name)}, let's leverage your fridge.</h1>
+  <p>Fridgy harnesses next-gen culinary intelligence to unlock the full potential of your pantry ecosystem.</p>
+  <div class="row" style="margin-top:16px"><button class="btn" onclick="suggest()">Generate Magic ✨</button><button class="btn v" onclick="suggest()">Optimize My Fridge 🚀</button><button class="btn g" onclick="suggest()">Discover Recipes 🔮</button></div></div>
+  <div class="card"><h3 style="margin-bottom:12px">Add to your Fridge Inventory</h3>
+  <div class="form"><div><label>Item name</label><input type="text" id="fn" placeholder="e.g. Cherry tomatoes"></div>
+  <div><label>Quantity (g)</label><input type="number" id="fq" placeholder="grams"></div>
+  <div><label>Expiry date</label><input type="date" id="fd"></div>
+  <div><label>Category</label><select id="fc"><option value="">Select...</option>${CATS.map(c=>`<option>${c}</option>`).join("")}</select></div>
+  <button class="btn" onclick="addItem()">Add</button></div>
+  ${S.err?`<div class="err">${S.err}</div>`:""}</div>
+  <div class="card"><h3>Inventory (${S.items.length})</h3>${S.items.length?S.items.map((it,i)=>`<div class="item"><b>${esc(it.n)}</b><span class="pill">${it.c}</span><span class="muted">${it.q} g</span><span class="muted small">exp. ${it.d}</span><button class="x" onclick="del(${i})">✕</button></div>`).join(""):'<div class="empty">Nothing to see here.</div>'}</div>`;
+},
+discover(){
+  if(!S.gen)return `<div class="card"><h2>Discover Recipes</h2><div class="empty">No results.</div></div>`;
+  const names=S.items.map(i=>i.n.toLowerCase());
+  const list=RECIPES.map(r=>({r,have:r.ing.filter(g=>names.some(n=>n.includes(g)||g.includes(n))).length})).filter(x=>x.have>0).sort((a,b)=>b.r.hype-a.r.hype);
+  return `<h2 style="margin-bottom:4px">Your Curated Culinary Matches</h2><p class="muted">Ranked by Culinary Synergy Index™</p><br>
+  ${list.length?`<div class="grid">${list.map(({r,have})=>`<div class="card rc" onclick="openRecipe(${JSON.stringify(r.id)})"><div class="top">${r.e}</div><div class="bd"><h3>${r.n}</h3>
+  <p class="muted small">${r.min>=60?Math.floor(r.min/60)+"h "+String(r.min%60).padStart(2,"0"):r.min+" min"} · ${r.ing.length} ingredients</p>
+  <span class="pill p">Synergy ${r.hype}%</span> <span class="pill">${have}/${r.ing.length} in fridge</span></div></div>`).join("")}</div>`:'<div class="card empty">Nothing matched.</div>'}`;
+},
+plan(){return `<h2>Meal Plan Studio</h2><p class="muted">Orchestrate your week with AI-powered scheduling.</p><div class="card"><div class="cal">${["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d=>`<div>${d}<p class="muted small" style="font-weight:600">+ Add meal</p></div>`).join("")}</div><br><button class="btn v" onclick="toast('Auto-planning requires Fridgy Pro')">Auto-Plan Week ✨</button></div>`},
+coach(){return `<h2>Macro Coach AI</h2><p class="muted">Hyper-personalised nutrition intelligence.</p><div class="card"><label>Your goal</label><select id="goal"><option>Lean bulk</option><option>Maintenance</option><option>Cut</option></select><br><br><button class="btn" onclick="S.coach=[1800+Math.floor(Math.random()*900),Math.floor(Math.random()*30+80),Math.floor(Math.random()*40+30)];render()">Analyze My Macros</button>
+  ${S.coach?`<p style="margin-top:18px"><span class="big-n">${S.coach[0]}</span> kcal target</p><p>Protein ${S.coach[1]} g · Fat ${S.coach[2]} g<br><span class="muted small">Macro synergy: optimized. Not medical advice (or any advice).</span></p>`:""}</div>`},
+list(){return `<h2>Smart Shopping List</h2><p class="muted">Auto-synced with your Smart Pantry.</p><div class="card">${S.list.map(x=>`<div class="item">☐ ${x}</div>`).join("")}
+  <br><button class="btn g" onclick="sync()" ${S.syncing?"disabled":""}>${S.syncing?'<span class="spin">⟳</span> Syncing...':"Sync Smart Pantry"}</button> ${S.synced?`<span class="muted small">Last synced ${S.synced}</span>`:""}</div>`},
+feed(){return `<h2>Fridgy Feed</h2><p class="muted">What the community is cooking.</p>${FEED.map((f,i)=>`<div class="card"><b>${f[0]}</b><p>${f[1]}</p><button class="btn ghost" onclick="S.likes[${i}]=!S.likes[${i}];render()">${S.likes[i]?"❤️":"🤍"} ${f[2]+(S.likes[i]?1:0)}</button></div>`).join("")}`},
+score(){const sc=Math.min(999,S.items.length*37+120);return `<h2>Fridge Score</h2><div class="card"><div class="big-n">${sc}</div><p><span class="pill y">Level 3 · Sous-Chef</span></p><div class="bar"><div style="width:${sc/10}%"></div></div><p class="muted small">Earn XP by adding items. Reach 1000 to unlock the Golden Whisk. We will tell you what that is later.</p></div>`},
+wine(){return `<h2>Pairing Lab</h2><p class="muted">Elevate every dish.</p><div class="card"><label>Pick a dish</label><select id="wd">${RECIPES.map(r=>`<option>${r.n}</option>`).join("")}</select><br><br><button class="btn v" onclick="toast('Pair with '+WINES[Math.floor(Math.random()*4)])">Find Pairing 🍷</button></div>`},
+quiz(){
+  if(S.quiz)return `<h2>Chef Persona</h2><div class="card"><div class="big-n" style="font-size:48px">🔥</div><h3>You are The Visionary Sautéer</h3><p class="muted">Bold, spontaneous, slightly chaotic. (Does not change anything in the app.)</p><button class="btn ghost" onclick="S.quiz=null;S.quizStep=0;render()">Retake</button></div>`;
+  const q=QUIZ[S.quizStep];return `<h2>Chef Persona</h2><div class="card"><p class="muted small">Question ${S.quizStep+1}/3</p><h3>${q[0]}</h3><div class="row" style="margin-top:14px">${q[1].map(o=>`<button class="btn ghost" onclick="S.quizStep++;if(S.quizStep>2)S.quiz=1;render()">${o}</button>`).join("")}</div></div>`},
+settings(){
+  if(S.showLabs)return `<button class="btn ghost" onclick="S.showLabs=false;render()">← Advanced</button><br><br><h2>Freshness Radar</h2><p class="muted">Items closest to expiry.</p><div class="card">${
+   S.items.length?[...S.items].sort((a,b)=>a.d<b.d?-1:1).map(it=>{const d=daysLeft(it.d);return `<div class="item"><b>${esc(it.n)}</b><span class="pill ${d<=2?"red":d<=5?"y":""}">${d<0?"expired":d===0?"today":d+" days"}</span></div>`}).join(""):'<div class="empty">No data.</div>'}</div>`;
+  if(S.showAdv)return `<button class="btn ghost" onclick="S.showAdv=false;render()">← Kitchen Intelligence</button><br><br><h2>Advanced Labs</h2><div class="card"><div class="item"><div><b>Freshness Radar</b><p class="muted small">Surface items by remaining shelf-life.</p></div><button class="btn ghost x" onclick="S.showLabs=true;render()" style="margin-left:auto">Open</button></div><div class="item"><div><b>Neural Pantry Mesh</b><p class="muted small">Experimental. Do not enable.</p></div><span class="pill">Off</span></div></div>`;
+  if(S.sub==="ki")return `<button class="btn ghost" onclick="S.sub=null;render()">← Settings</button><br><br><h2>Kitchen Intelligence</h2><div class="card">
+  <div class="item"><b>Culinary tone</b><select style="width:160px;margin-left:auto"><option>Friendly</option><option>Sassy</option></select></div>
+  <div class="item"><b>Smart substitutions</b><span class="pill">On</span></div>
+  <div class="item"><b>Advanced Labs</b><button class="btn ghost x" style="margin-left:auto" onclick="S.showAdv=true;render()">Explore →</button></div></div>`;
+  return `<h2>Settings</h2><div class="card">
+  <div class="item"><b>Profile</b><span class="muted" style="margin-left:auto">${esc(S.ans.name)} · ${esc(S.ans.diet)}</span></div>
+  <div class="item"><b>Dietary preference</b><span class="pill" style="margin-left:auto">${esc(S.ans.diet)}</span></div>
+  <div class="item"><b>Push notifications</b><span class="pill">On</span></div>
+  <div class="item"><b>Kitchen Intelligence</b><button class="btn ghost x" style="margin-left:auto" onclick="S.sub='ki';render()">Configure →</button></div>
+  <div class="item"><b>Fridgy Pro</b><button class="btn v x" style="margin-left:auto" onclick="paywall()">Upgrade</button></div></div>`}
+};
+
+/* ---------- actions ---------- */
+function addItem(){
+  const n=$("fn").value.trim(),q=+$("fq").value,d=$("fd").value,c=$("fc").value;
+  if(!n||!q||!d||!c){S.err="Invalid input. Please fill in all fields correctly.";render();return}
+  if(q<=0||q%1){S.err="You entered an invalid quantity. Quantities must be whole numbers.";render();return}
+  if(daysLeft(d)<0){S.err="You entered an expired date. Please check your input.";render();return}
+  S.err="";S.items.push({n,q,d,c});render();$("fn").focus();
+}
+function del(i){S.items.splice(i,1);render()}
+function suggest(){
+  if(S.items.length<5){S.err="Oops! You haven't added enough ingredients. Please read the instructions and try again.";render();return}
+  const first=!S.gen;S.gen=true;go("discover");
+  if(first)setTimeout(()=>{if(!S.paywalled){S.paywalled=true;paywall()}},1200);
+}
+function openRecipe(id){
+  const r=RECIPES.find(x=>x.id===id);
+  modal(`<button class="closer" onclick="closeModal()">close</button><div style="font-size:54px">${r.e}</div><h2>${r.n}</h2><p class="muted">${r.min} min · ${r.ing.length} ingredients · ${r.diet.join(", ")}</p>
+  <h3 style="margin-top:14px">Ingredients</h3><ul class="ing">${r.ing.map(i=>`<li>${i}</li>`).join("")}</ul>
+  <h3 style="margin-top:14px">Method</h3><ol class="steps">${r.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+  <div class="row"><button class="btn" onclick="toast('Saved to Favourites');">Save</button><button class="btn v" onclick="toast('Shared to Fridgy Feed')">Share</button><button class="btn g" onclick="toast('Added to Smart List')">Cook Mode</button></div>`,"wide");
+}
+function paywall(){
+  closeModal();
+  modal(`<button class="closer" onclick="closeModal()">x</button><div class="pro"><div class="big">👑</div><h2>Unlock Fridgy Pro</h2><p class="muted">Unlimited culinary intelligence. Priority synergy. Zero limits.</p>
+  <p class="price">€14.99<span class="small muted">/month</span></p><p class="small muted">Billed annually at €179.88 after trial.</p>
+  <button class="btn v" style="width:100%" onclick="closeModal();toast('Payments are not connected in this demo')">Start free trial</button>
+  <button class="nothanks" onclick="closeModal()">No thanks, I prefer wasting food</button></div>`);
+}
+function sync(){S.syncing=true;render();setTimeout(()=>{S.syncing=false;S.synced="just now";render()},2200)}
+render();
+</script>
+</body>
+</html>

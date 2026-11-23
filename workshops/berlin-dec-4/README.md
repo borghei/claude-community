@@ -14,7 +14,13 @@ Pick one with your team and turn it into something people would actually use. Th
 | 🧭 Wanderly | "Plan your dream trip in seconds with AI." | [Open](https://borghei.github.io/claude-community/workshops/berlin-dec-4/wanderly/) | [wanderly/](wanderly/) |
 | 🫶 Huddle | "Plan anything with your friends. Dinners, trips, birthdays, finally organised." | [Open](https://borghei.github.io/claude-community/workshops/berlin-dec-4/huddle/) | [huddle/](huddle/) |
 
-Each app is a single `index.html` file. To work on one with Claude Code, download it (or clone this repo), open the folder, and start `claude`.
+Each app is a single `index.html` file. No GitHub account needed to get it. On the start page, each app has:
+
+- **Download**: saves the app as one `.html` file.
+- **Copy code**: copies the whole code, ready to paste into Claude.
+- **Link for Claude**: a plain-text link to the code (`<app>/code.txt`) that Claude, or any AI tool that can open links, can read directly.
+
+To work on one with Claude Code, download it into a folder, open that folder, and start `claude`.
 
 ## Five questions before you build
 

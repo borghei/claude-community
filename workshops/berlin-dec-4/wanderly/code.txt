@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wanderly - Plan your dream trip in seconds with AI</title>
+<style>
+:root{
+  --ink:#1b1740;--mute:#6b6a8f;--pink:#ff7eb6;--violet:#7a5cff;--sky:#4cc9f0;--gold:#ffc65c;
+  --glass:rgba(255,255,255,.62);--line:rgba(255,255,255,.7);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);
+  background:linear-gradient(180deg,#8fa6ff 0%,#c9a9ff 28%,#ffc2dc 52%,#ffe6cf 78%,#fff7ee 100%);background-attachment:fixed;min-height:100vh}
+button{font:inherit;cursor:pointer}
+a{color:var(--violet)}
+.banner{background:linear-gradient(90deg,#1b1740,#3b2a8c);color:#fff;text-align:center;padding:8px 12px;font-size:13px;position:sticky;top:0;z-index:20}
+.banner b{color:var(--gold);font-variant-numeric:tabular-nums}
+.banner button{margin-left:10px;border:0;border-radius:99px;background:var(--gold);color:#1b1740;font-weight:700;padding:4px 12px;font-size:12px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 5vw}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.5px;color:#fff;text-shadow:0 2px 12px rgba(60,30,140,.35)}
+.navr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);border-radius:99px;padding:8px 16px;color:var(--ink);font-weight:600;font-size:14px}
+.pill.dark{background:#1b1740;color:#fff;border-color:#1b1740}
+.pill.gold{background:linear-gradient(90deg,#ffd27a,#ffa857);border-color:transparent}
+.hero{text-align:center;color:#fff;padding:7vh 5vw 5vh;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(38px,7vw,78px);line-height:1.02;margin:0 auto 16px;max-width:900px;letter-spacing:-2px;text-shadow:0 4px 30px rgba(60,30,140,.4)}
+.hero p{font-size:clamp(16px,2vw,21px);max-width:640px;margin:0 auto 28px;opacity:.95}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta{border:0;border-radius:99px;padding:15px 26px;font-weight:700;font-size:16px;box-shadow:0 10px 30px rgba(60,30,140,.25)}
+.c1{background:#fff;color:var(--violet)}
+.c2{background:linear-gradient(90deg,var(--pink),var(--violet));color:#fff}
+.c3{background:rgba(255,255,255,.2);color:#fff;border:2px solid #fff}
+.sun{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,#fff6c9,#ffc65c 55%,transparent 70%);right:8%;top:40px;opacity:.55;z-index:-1}
+.cloud{position:absolute;font-size:70px;opacity:.7;animation:drift 30s linear infinite}
+@keyframes drift{from{transform:translateX(-10vw)}to{transform:translateX(110vw)}}
+section{padding:36px 5vw;max-width:1180px;margin:0 auto}
+h2{font-size:clamp(26px,3.5vw,38px);letter-spacing:-1px;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 22px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 12px 40px rgba(90,60,180,.12)}
+.card h3{margin:6px 0 6px;font-size:18px}
+.card p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.5}
+.emo{font-size:30px}
+.tag{display:inline-block;font-size:11px;font-weight:700;background:#1b1740;color:#fff;border-radius:99px;padding:3px 9px;margin-top:10px}
+.tag.soon{background:#b9b7d6}
+.feat{cursor:pointer;transition:transform .15s}
+.feat:hover{transform:translateY(-3px)}
+footer{text-align:center;padding:50px 5vw 40px;color:var(--mute);font-size:13px}
+footer .lite{font-size:9px;color:#b4a9d4;margin-left:10px;opacity:.7}
+.wrap{max-width:760px;margin:0 auto;padding:20px 5vw 60px}
+.panel{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:0 16px 50px rgba(90,60,180,.15)}
+.bar{height:8px;border-radius:9px;background:rgba(255,255,255,.7);overflow:hidden;margin:6px 0 20px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--violet));transition:width .3s}
+label.q{display:block;font-size:22px;font-weight:700;margin-bottom:6px;letter-spacing:-.5px}
+.hint{font-size:13px;color:var(--mute);margin:0 0 14px}
+input[type=text],input[type=number],select{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid #d9d4f5;font:inherit;font-size:16px;background:#fff;color:var(--ink)}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.err{color:#d12a52;font-size:14px;margin-top:10px;font-weight:600}
+.row{display:flex;justify-content:flex-end;margin-top:22px}
+.btn{border:0;border-radius:99px;padding:13px 26px;font-weight:700;background:linear-gradient(90deg,var(--pink),var(--violet));color:#fff;font-size:16px}
+.btn.ghost{background:transparent;color:var(--violet);border:1.5px solid var(--violet)}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.toolbar button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--glass);font-size:18px}
+.toolbar button:hover{background:#fff}
+.wall{font-size:15px;line-height:1.55;text-align:justify;color:#2a2650}
+.wall h4{margin:18px 0 4px;font-size:15px;color:var(--violet)}
+.wall p{margin:0 0 8px}
+.dest{font-size:clamp(26px,4vw,40px);letter-spacing:-1px;margin:0 0 4px}
+.score{display:inline-block;background:#ffe4e4;color:#b02a2a;border-radius:10px;padding:4px 10px;font-size:13px;font-weight:700;margin:4px 6px 4px 0}
+.sc2{background:#e8e2ff;color:#4b36b8}
+.overlay{position:fixed;inset:0;background:rgba(27,23,64,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{background:#fff;border-radius:24px;max-width:440px;width:100%;padding:28px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.modal h3{margin:0 0 8px;font-size:24px;letter-spacing:-.5px}
+.modal .x{position:absolute;right:12px;top:8px;border:0;background:none;font-size:11px;color:#ccc;padding:4px}
+.modal input{margin:6px 0}
+.black{background:linear-gradient(160deg,#0e0b26,#2a1d6e);color:#fff}
+.black p,.black li{color:#d8d4ff;font-size:14px}
+.black .big{font-size:42px;font-weight:800;color:var(--gold)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1b1740;color:#fff;padding:12px 20px;border-radius:14px;z-index:60;font-size:14px;max-width:90vw}
+.spin{text-align:center;padding:60px 0;font-size:18px}
+.spin b{display:block;font-size:48px;animation:sp 1.2s linear infinite;width:60px;margin:0 auto 10px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.feed .post{border-bottom:1px solid #eee;padding:10px 0;font-size:14px}
+.empty{padding:30px;text-align:center;color:#b02a2a;font-weight:600}
+.lite-opt{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lite-opt b.t{font-size:20px}
+.chip{background:#e6f7ee;color:#1f7a4a;border-radius:99px;padding:4px 10px;font-weight:700;font-size:13px;margin-right:6px}
+@media(max-width:600px){.three{grid-template-columns:1fr}.panel{padding:20px}.sun{display:none}.wall{text-align:left}}
+</style>
+</head>
+<body>
+<div class="banner" id="banner">Wanderly Black early-bird: 70% off ends in <b id="cd">09:59</b><button onclick="openBlack('banner')">Claim</button></div>
+<div id="app"></div>
+<div id="overlay"></div>
+<div id="toast"></div>
+
+<script>
+/* ---------- state ---------- */
+var S = { view:'landing', step:0, ans:{}, trip:null, err:'', seed:1, black:0, shown7:false };
+
+/* ---------- fake countdown (resets forever) ---------- */
+var secs = 599;
+setInterval(function(){
+  secs--; if(secs<0) secs = 599;
+  var m = String(Math.floor(secs/60)).padStart(2,'0'), s = String(secs%60).padStart(2,'0');
+  var el = document.getElementById('cd'); if(el) el.textContent = m+':'+s;
+},1000);
+
+/* ---------- the 14 questions ---------- */
+var MBTI = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+var Q = [
+ {k:'name', t:'What is your full legal name?', h:'As on your passport. We will not share it. (Probably.)', type:'text'},
+ {k:'passport', t:'What colour is your passport?', h:'Be precise.', type:'select', o:['Burgundy','Navy blue','Green','Black','Red','Other shade of blue']},
+ {k:'seat', t:'Preferred airplane seat?', h:'This heavily influences your itinerary.', type:'select', o:['Window','Aisle','Middle (brave)','Exit row','Bulkhead','Cockpit']},
+ {k:'mbti', t:'What is your Myers-Briggs type?', h:'Retake the test if you do not know it.', type:'select', o:MBTI},
+ {k:'budget', t:'Total budget?', h:'Please enter it in all three currencies. They must be consistent.', type:'money'},
+ {k:'vibe', t:'Pick your destination vibe', h:'', type:'select', o:['Chaotic neutral','Soft launch','Main character','Quiet luxury','Feral','Cozy gremlin']},
+ {k:'style', t:'Which traveller are you?', h:'', type:'select', o:['Backpacker','Luxury','Business','Family','Digital nomad','Honeymoon','Pilgrim']},
+ {k:'breakfast', t:'Describe your ideal breakfast in one word', h:'', type:'text'},
+ {k:'animal', t:'Spirit animal', h:'', type:'select', o:['Fox','Heron','Capybara','Wolf','Octopus','Moth']},
+ {k:'sleep', t:'What time does your soul go to sleep?', h:'In 24h format, e.g. 23:30', type:'text'},
+ {k:'temp', t:'Ideal temperature in Kelvin', h:'', type:'number'},
+ {k:'decade', t:'Favourite decade', h:'', type:'select', o:['1920s','1960s','1980s','1990s','2010s','The future']},
+ {k:'adv', t:'Adventurousness from 1 to 10', h:'No decimals.', type:'number'},
+ {k:'wish', t:'Describe your dream trip in at least 40 characters', h:'Do not just say "beach".', type:'text'}
+];
+
+/* ---------- views ---------- */
+var app = document.getElementById('app');
+function $(h){ return h; }
+
+function nav(){
+  return '<nav><div class="logo" onclick="go(\'landing\')" style="cursor:pointer">Wanderly&#x2728;</div><div class="navr">'
+   +'<button class="pill" onclick="go(\'feed\')">Community</button>'
+   +'<button class="pill" onclick="go(\'tools\')">Tools</button>'
+   +'<button class="pill gold" onclick="openBlack(\'nav\')">&#x1F451; Black</button>'
+   +'<button class="pill dark" onclick="startDNA()">Log in</button></div></nav>';
+}
+
+function landing(){
+  var f = [
+   ['&#x1F392;','Backpackers','Hostel hops, night buses, $12 a day. Go feral.'],
+   ['&#x1F378;','Luxury travellers','Private jets, secret suites, concierge-grade AI.'],
+   ['&#x1F4BC;','Business trips','Expense-ready itineraries between meetings.'],
+   ['&#x1F46A;','Families','Kid-proof plans with nap windows built in.']
+  ];
+  var tools = [
+   ['&#x1F9F3;','AI Packing List','Never forget your charger. Or your destiny.','packing'],
+   ['&#x1F6C2;','Visa Checker','Know before you go.','visa','soon'],
+   ['&#x1F4B1;','Currency Converter','Because maths is hard on holiday.','fx'],
+   ['&#x1F52E;','Travel Horoscope','Mercury is in your departure lounge.','horo'],
+   ['&#x1F4F8;','Influencer Spot Finder','Find where the light is golden and the queue is long.','spots'],
+   ['&#x1F331;','Carbon Guilt Score','Quantify your remorse.','carbon'],
+   ['&#x1F465;','Community Feed','Travellers, vibes, and vibes.','feed']
+  ];
+  return nav()
+  +'<div class="hero"><div class="sun"></div><div class="cloud" style="top:30px">&#x2601;&#xFE0F;</div><div class="cloud" style="top:160px;animation-duration:45px">&#x2601;&#xFE0F;</div>'
+  +'<h1>The future of wandering is here.</h1>'
+  +'<p>Wanderly is the AI-native, hyper-personalised travel intelligence layer that reimagines how humans move through the world. Plan your dream trip in seconds.</p>'
+  +'<div class="ctas"><button class="cta c1" onclick="startDNA()">Start your journey</button><button class="cta c2" onclick="startDNA()">Get your Travel DNA</button><button class="cta c3" onclick="openBlack(\'hero\')">Go Black &#x1F451;</button></div>'
+  +'<p style="margin-top:26px;font-size:14px;opacity:.9">&#x2B50; Loved by 2,000,000 wanderers &middot; As seen in everywhere</p></div>'
+  +'<section><h2>Built for everyone.</h2><p class="sub">Whoever you are, wherever you are going.</p><div class="grid">'
+  + f.map(function(x){return '<div class="card"><div class="emo">'+x[0]+'</div><h3>'+x[1]+'</h3><p>'+x[2]+'</p></div>';}).join('')
+  +'</div></section>'
+  +'<section><h2>Everything you could ever want</h2><p class="sub">One app. Infinite possibilities. 7 tools and counting.</p><div class="grid">'
+  + tools.map(function(x){return '<div class="card feat" onclick="tool(\''+x[3]+'\')"><div class="emo">'+x[0]+'</div><h3>'+x[1]+'</h3><p>'+x[2]+'</p>'+(x[4]?'<span class="tag soon">COMING SOON</span>':'<span class="tag">NEW</span>')+'</div>';}).join('')
+  +'</div></section>'
+  +'<footer>&copy; 2026 Wanderly Labs &middot; Made with &#x1F499; in a weekend &middot; Terms &middot; Privacy &middot; Cookies<a href="#" class="lite" onclick="go(\'lite\');return false">Lite mode</a></footer>';
+}
+
+function dna(){
+  var q = Q[S.step], v = S.ans[q.k] || {}, pct = Math.round((S.step)/14*100);
+  var inp = '';
+  if(q.type==='text') inp = '<input type="text" id="f0" value="'+esc(S.ans[q.k]||'')+'">';
+  if(q.type==='number') inp = '<input type="number" id="f0" value="'+esc(S.ans[q.k]||'')+'">';
+  if(q.type==='select') inp = '<select id="f0"><option value="">Select...</option>'+q.o.map(function(o){return '<option'+(S.ans[q.k]===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>';
+  if(q.type==='money') inp = '<div class="three"><input type="number" id="f1" placeholder="EUR" value="'+esc(v.eur||'')+'"><input type="number" id="f2" placeholder="USD" value="'+esc(v.usd||'')+'"><input type="number" id="f3" placeholder="GBP" value="'+esc(v.gbp||'')+'"></div>';
+  return nav()+'<div class="wrap"><div class="panel">'
+   +'<div style="font-size:13px;color:var(--mute);font-weight:600">Question '+(S.step+1)+' of 14 &middot; '+(S.step<2?'Almost there!':S.step<7?'Great progress!':'So close!')+'</div>'
+   +'<div class="bar"><i style="width:'+pct+'%"></i></div>'
+   +'<label class="q" for="f0">'+q.t+' <span style="color:#d12a52">*</span></label><p class="hint">'+q.h+'</p>'+inp
+   +(S.err?'<div class="err">'+S.err+'</div>':'')
+   +'<div class="row"><button class="btn" onclick="next()">'+(S.step===13?'Reveal my trip':'Continue')+'</button></div>'
+   +'</div></div>';
+}
+
+function toolbar(){
+  return '<div class="toolbar"><button onclick="regen()">&#x1F501;</button><button onclick="openBlack(\'save\')">&#x1F4BE;</button><button onclick="openShare()">&#x1F517;</button>'
+   +'<button onclick="exportTrip()">&#x2B07;&#xFE0F;</button><button onclick="toast(\'Nothing to edit yet. Complete your profile first.\')">&#x270F;&#xFE0F;</button>'
+   +'<button onclick="tool(\'horo\')">&#x1F52E;</button><button onclick="tool(\'carbon\')">&#x1F331;</button><button onclick="toast(\'Rating requires a Wanderly account.\')">&#x2B50;</button></div>';
+}
+
+function result(){
+  var t = S.trip;
+  return nav()+'<div class="wrap" style="max-width:860px"><div class="panel">'
+   +toolbar()
+   +'<h2 class="dest">'+t.name+', '+t.country+' &#x2728;</h2>'
+   +'<p class="sub">Your personalised 7-day journey for '+esc(S.ans.name||'Traveller')+' ('+esc(S.ans.mbti||'')+', '+esc(S.ans.seat||'')+' seat). Match score: <b>'+(61+(S.seed*7)%38)+'%</b></p>'
+   +'<span class="score">&#x1F331; Carbon guilt: '+(7+S.seed%3)+'.'+(S.seed%9)+'/10</span><span class="score sc2">&#x1F52E; Mercury retrograde: yes</span>'
+   +'<div class="wall">'+t.days.map(function(d,i){return '<h4>DAY '+(i+1)+'</h4><p>'+d+'</p>';}).join('')+'</div>'
+   +'<div class="row" style="justify-content:space-between;margin-top:30px"><span style="color:var(--mute);font-size:13px">Not happy? Day 4 is a bit much? That is on you for choosing '+esc(S.ans.vibe||'that')+'.</span><button class="btn" onclick="regen()">Regenerate everything</button></div>'
+   +'</div></div>';
+}
+
+function loading(msg){
+  return nav()+'<div class="wrap"><div class="panel spin"><b>&#x1F30D;</b>'+msg+'</div></div>';
+}
+
+function feed(){
+  var logged = false;
+  return nav()+'<div class="wrap"><div class="panel feed"><h2>Community</h2><p class="sub">Real travellers. Real vibes.</p>'
+   +(logged?'':'<div class="empty">No posts to show. Did you forget to log in? Did you even try to make friends?</div>')
+   +'<div class="row" style="justify-content:flex-start"><button class="btn ghost" onclick="openShare()">Post something</button></div></div></div>';
+}
+
+function tools(){
+  return nav()+'<div class="wrap"><div class="panel"><h2>Tools</h2><p class="sub">Pick one. Or all of them. We have no opinion.</p>'
+   +'<div class="grid">'+[['packing','&#x1F9F3; Packing List'],['visa','&#x1F6C2; Visa Checker'],['fx','&#x1F4B1; Converter'],['horo','&#x1F52E; Horoscope'],['spots','&#x1F4F8; Spots'],['carbon','&#x1F331; Carbon']].map(function(x){return '<button class="pill" onclick="tool(\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</div>'
+   +'<div id="toolout" style="margin-top:22px"></div></div></div>';
+}
+
+/* ---------- lite mode: the genuinely useful bit ---------- */
+function lite(){
+  var o = [
+   ['Leipzig','1h 15 min','&euro;25-45 train','&euro;110-160','Compact, cafes, canals, easy first-timer weekend.'],
+   ['Dresden','2h 05 min','&euro;30-60 train','&euro;140-210','Old town, river walks, museums with proper opening hours.'],
+   ['Rostock + coast','2h 45 min','&euro;35-70 train','&euro;150-230','Harbour, sea air, an easy day trip to the beach.']
+  ];
+  return '<div class="wrap" style="padding-top:36px"><div class="panel"><div style="color:var(--mute);font-size:13px;cursor:pointer" onclick="go(\'landing\')">&larr; Back to full Wanderly</div>'
+   +'<h2 style="margin-top:10px">Weekend from Berlin</h2><p class="sub">Friday evening out, Sunday evening back. Sample figures for 2 nights, one person.</p>'
+   + o.map(function(x){return '<div class="card" style="margin-bottom:12px"><div class="lite-opt"><div><b class="t">'+x[0]+'</b><p style="margin-top:4px">'+x[4]+'</p></div>'
+     +'<div><span class="chip">&#x1F686; '+x[1]+'</span><span class="chip">'+x[2]+'</span><br><span style="font-size:14px;font-weight:700;line-height:2">Total weekend: '+x[3]+'</span></div></div></div>';}).join('')
+   +'<p class="hint">Fares and times are examples and change daily.</p></div></div>';
+}
+
+/* ---------- navigation ---------- */
+function go(v){ S.view=v; render(); window.scrollTo(0,0); }
+function startDNA(){ S.step=0; S.err=''; go('dna'); }
+function render(){
+  var v = S.view;
+  app.innerHTML = v==='landing'?landing():v==='dna'?dna():v==='result'?result():v==='feed'?feed():v==='tools'?tools():v==='lite'?lite():v==='loading'?loading(S.msg):'';
+  var b = document.getElementById('banner'); if(b) b.style.display = (v==='lite')?'none':'';
+}
+
+/* ---------- form logic ---------- */
+function next(){
+  var q = Q[S.step], bad = '';
+  if(q.type==='money'){
+    var e=g('f1'),u=g('f2'),p=g('f3');
+    if(!e||!u||!p) bad = 'All three amounts are required. It is not that complicated.';
+    else if(Math.abs(u/e-1.08)>.15 || Math.abs(p/e-.85)>.15) bad = 'Your three amounts do not match. Please check the exchange rate and try again.';
+    else S.ans.budget = {eur:e,usd:u,gbp:p};
+  } else {
+    var val = g('f0');
+    if(!val) bad = 'You forgot to answer this question. Please read it carefully.';
+    else if(q.k==='sleep' && !/^([01]\d|2[0-3]):[0-5]\d$/.test(val)) bad = 'That is not a valid time. Use HH:MM, like we said.';
+    else if(q.k==='adv' && (val<1||val>10)) bad = 'Invalid input. Numbers have limits, you know.';
+    else if(q.k==='wish' && val.length<40) bad = 'Too short! Dreams deserve more effort than that.';
+    else if(q.k==='temp' && (val<250||val>330)) bad = 'Nobody wants to travel there. Try again.';
+    else S.ans[q.k] = val;
+  }
+  S.err = bad;
+  if(bad){ render(); return; }
+  if(S.step===6 && !S.black){ S.black=1; S.step++; render(); openBlack('dna'); return; }
+  if(S.step<13){ S.step++; render(); return; }
+  generate('Analysing your passport colour and spirit animal...');
+}
+function g(id){ var e=document.getElementById(id); return e? e.value.trim() : ''; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+/* ---------- fake AI: canned templates ---------- */
+var PLACES = [
+ {name:'Lumora Bay',country:'Azurea',sites:['the Glass Lighthouse','the Coral Market','Lantern Hill','the Salt Museum','Old Harbour Baths','the Sky Funicular']},
+ {name:'Valdorra',country:'Northmark',sites:['Frostline Cathedral','the Aurora Observatory','the Ice Library','Hollow Pine Trail','the Fjord Ferry Pier','Saint Orla Square']},
+ {name:'Mirasol',country:'Sundara',sites:['the Terracotta Souk','Moon Gate Gardens','the Spice Archive','Dune Edge Camp','the Tile Museum','the Rooftop Teahouse']},
+ {name:'Kinoto Falls',country:'Eastreach',sites:['the Lantern Shrine','Cedar Onsen Row','the Paper Museum','Bamboo Mile','the Night Noodle Alley','Cloud Peak Station']}
+];
+var TIMES = ['03:00','04:30','06:15','13:40','15:10','17:55','21:30','23:45','02:20','09:05'];
+var ACT = [
+ 'Begin the day with a deeply immersive visit to %s, where the vibe is, frankly, unmatched, and every angle is a story waiting to be discovered by someone exactly like you',
+ 'Then transition seamlessly to %s, a hidden gem that is not hidden at all, and spend as long as your energy permits absorbing the local magic',
+ 'Next, soak up the authentic atmosphere at %s, before a spontaneous detour to %s, which is only %s km away by taxi, a completely reasonable distance',
+ 'Round things off with an elevated experience at %s followed by an unforgettable moment of reflection under the sky',
+ 'Treat yourself to an iconic stop at %s, then dive into the energy of %s, locals call it "the place"'
+];
+function pick(a,n){ return a[(n%a.length+a.length)%a.length]; }
+function hash(str){ var h=7; for(var i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))|0; return Math.abs(h); }
+
+function generate(msg){
+  S.msg = msg; go('loading');
+  setTimeout(function(){
+    S.seed = hash(JSON.stringify(S.ans)) + (S.regenCount=(S.regenCount||0)+1)*13;
+    var p = pick(PLACES, S.seed), days=[];
+    for(var d=0; d<7; d++){
+      var s = '', n = 4;
+      for(var i=0;i<n;i++){
+        var sa = pick(p.sites,S.seed+d*3+i), sb = pick(p.sites,S.seed+d*5+i+2);
+        var tm = pick(TIMES, S.seed+d*7+i*3);
+        var line = pick(ACT, S.seed+d+i).replace('%s',sa).replace('%s',sb).replace('%s',(120+((S.seed+d*91+i*37)%1900)));
+        s += '<b>'+tm+'</b> &ndash; '+line+'. ';
+      }
+      days.push(s+'You may also wish to explore the area at your own pace, although we recommend not wasting a single minute.');
+    }
+    S.trip = {name:p.name,country:p.country,days:days};
+    go('result');
+  }, 2200);
+}
+function regen(){ generate('Regenerating everything from scratch. Your previous itinerary is gone forever...'); }
+
+/* ---------- modals ---------- */
+function closeM(){ document.getElementById('overlay').innerHTML=''; }
+function modal(html){ document.getElementById('overlay').innerHTML='<div class="overlay"><div class="modal'+(html.black?' black':'')+'">'+html.body+'</div></div>'; }
+function openBlack(src){
+  modal({black:1,body:'<button class="x" onclick="closeM()">close</button><div style="font-size:13px;color:var(--gold);font-weight:700">WANDERLY BLACK &#x1F451;</div>'
+   +'<h3>Unlock the full experience</h3><div class="big">&euro;19.99<span style="font-size:15px">/week</span></div>'
+   +'<p>Offer ends in <b style="color:var(--gold)" id="cd2">'+document.getElementById('cd').textContent+'</b></p>'
+   +'<ul><li>Edit a single day (yes, really)</li><li>Save your trips</li><li>Priority AI that thinks 14% harder</li><li>Exclusive horoscope depth</li></ul>'
+   +'<button class="btn" style="width:100%;margin-top:8px;background:linear-gradient(90deg,#ffd27a,#ffa857);color:#1b1740" onclick="fail()">Go Black</button>'
+   +'<div style="text-align:center;margin-top:10px"><a href="#" style="color:#8d86c9;font-size:12px" onclick="closeM();return false">No thanks, I prefer to travel badly</a></div>'});
+}
+function fail(){ modal({body:'<h3>Hmm.</h3><p>Payments are not available in your region. Or your browser. Or something you did.</p><button class="btn" onclick="closeM()">OK</button>'}); }
+function openShare(){
+  modal({body:'<button class="x" onclick="closeM()">close</button><h3>Share your adventure &#x1F30E;</h3><p style="color:var(--mute);font-size:14px">Create a free account to share with your travel crew.</p>'
+   +'<input type="text" id="em" placeholder="Email"><input type="text" id="pw" placeholder="Password (8+ chars, 1 emoji)">'
+   +'<button class="btn" style="width:100%;margin-top:8px" onclick="shareFail()">Create account &amp; share</button>'});
+}
+function shareFail(){
+  modal({body:'<h3>Something went wrong</h3><p style="color:var(--mute);font-size:14px">We could not create your account. Please check your email address and try again later. Error 0x7E3.</p><button class="btn" onclick="closeM()">OK</button>'});
+}
+function exportTrip(){ toast('Export failed. Disable your ad blocker and try again.'); }
+function toast(m){ var t=document.getElementById('toast'); t.innerHTML='<div class="toast">'+m+'</div>'; setTimeout(function(){t.innerHTML='';},3200); }
+
+/* ---------- tools ---------- */
+function tool(id){
+  if(S.view!=='tools'){ S.view='tools'; render(); window.scrollTo(0,0); }
+  var out = document.getElementById('toolout'), h='';
+  if(id==='packing') h = S.trip ? '<h3>Packing for '+S.trip.name+'</h3><p>Passport (the '+esc(S.ans.passport||'')+' one), 3x shirts, 1x emotional support snack, adapter, hope.</p>' : '<div class="empty">You have not planned a trip yet. We cannot pack for a trip that does not exist.</div>';
+  if(id==='visa') h = '<h3>Visa Checker</h3><p>Coming soon. Please stop asking.</p>';
+  if(id==='fx') h = '<h3>Currency Converter</h3><div class="three"><input type="number" id="cv" placeholder="EUR"><button class="btn" onclick="conv()">Convert</button><span id="cvo" style="align-self:center"></span></div>';
+  if(id==='horo') h = '<h3>Travel Horoscope</h3><p>'+(S.ans.mbti?esc(S.ans.mbti)+', ':'')+'a stranger at a gate will offer you advice. Ignore it, except if it is about snacks.</p>';
+  if(id==='spots') h = '<h3>Influencer Spots</h3><p>Trending: a staircase, a different staircase, and a wall painted "just right". Queue time: 2h 40m.</p>';
+  if(id==='carbon') h = '<h3>Carbon Guilt Score</h3><p>'+(S.trip?'Your trip scores '+(7+S.seed%3)+'/10 guilt. Plant a tree. Or two. We take no commission. Yet.':'Plan a trip first, then feel bad about it.')+'</p>';
+  out.innerHTML = h;
+}
+function conv(){ var v=parseFloat(document.getElementById('cv').value); document.getElementById('cvo').textContent = isNaN(v)?'That is not a number.':'= $'+(v*1.08).toFixed(2)+' / £'+(v*.85).toFixed(2); }
+
+/* ---------- interruptions ---------- */
+setTimeout(function(){ if(S.view==='result' && !document.getElementById('overlay').innerHTML) openBlack('timer'); }, 20000);
+setInterval(function(){ if(S.view==='result' && !S.shown7 && document.getElementById('overlay').innerHTML===''){ S.shown7=true; openBlack('idle'); } }, 9000);
+
+render();
+</script>
+</body>
+</html>

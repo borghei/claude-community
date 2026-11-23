@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Huddle - Plan anything with your friends</title>
+<style>
+:root{--ac:#ff5a5f;--ac2:#7c5cff;--ink:#1d1b2e;--mut:#7a7890;--bg:#faf7ff;--card:#fff;--line:#ece8f6;--ok:#12b886;--warn:#f59f00}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+button,input,select,textarea{font:inherit}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:10px 18px;flex-wrap:wrap}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.5px;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent;margin-right:12px;cursor:pointer}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+nav a{padding:7px 12px;border-radius:99px;cursor:pointer;color:var(--mut);font-weight:600;font-size:14px}
+nav a.on{background:#f1ecff;color:var(--ac2)}
+.sp{flex:1}
+.bell{position:relative;cursor:pointer;font-size:20px;padding:4px 8px;background:none;border:0}
+.bell b{position:absolute;top:-2px;right:-2px;background:var(--ac);color:#fff;font-size:10px;border-radius:99px;padding:1px 5px}
+.av{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-size:15px;font-weight:700;color:#fff;flex:none}
+.av.s{width:26px;height:26px;font-size:12px}
+main{max-width:980px;margin:0 auto;padding:22px 18px 80px}
+h1{font-size:28px;margin:0 0 4px;letter-spacing:-.5px}h2{font-size:20px;margin:0 0 8px}h3{font-size:16px;margin:0 0 6px}
+.sub{color:var(--mut);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(80,60,160,.05)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;background:var(--ac);color:#fff}
+.btn.p2{background:var(--ac2)}.btn.g{background:#f1ecff;color:var(--ac2)}.btn.o{background:#fff;border:2px solid var(--ac);color:var(--ac)}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:9px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{display:inline-block;background:#f1ecff;color:var(--ac2);border-radius:99px;padding:3px 10px;font-size:12px;font-weight:600;margin:2px 3px 2px 0}
+.tag.sel{background:var(--ac2);color:#fff}
+.chip{display:inline-block;border:2px solid var(--line);border-radius:12px;padding:8px 12px;margin:4px;cursor:pointer;background:#fff;font-size:14px}
+.chip.sel{border-color:var(--ac2);background:#f1ecff}
+.tiny{font-size:10px;color:#a8a5bd}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:4px 0 10px}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tabs a{padding:9px 12px;cursor:pointer;color:var(--mut);white-space:nowrap;font-size:14px;border-bottom:3px solid transparent}
+.tabs a.on{color:var(--ink);border-color:var(--ac);font-weight:700}
+.bar{height:16px;background:#efeaff;border-radius:8px;overflow:hidden;margin:4px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac2),var(--ac))}
+.err{background:#fff0f0;border:1px solid #ffc9c9;color:#c92a2a;border-radius:10px;padding:10px 12px;margin:8px 0}
+.empty{text-align:center;color:var(--mut);padding:30px 10px;border:2px dashed var(--line);border-radius:16px}
+.steps{display:flex;gap:4px;margin-bottom:16px}.steps i{flex:1;height:6px;background:var(--line);border-radius:4px}.steps i.on{background:var(--ac2)}
+.menu{position:absolute;right:14px;top:56px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.15);width:230px;padding:6px;z-index:9}
+.menu a{display:block;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:14px}.menu a:hover{background:#f6f2ff}
+.toast{position:fixed;right:14px;bottom:14px;width:290px;z-index:20;display:flex;flex-direction:column;gap:8px}
+.toast div{background:#1d1b2e;color:#fff;padding:10px 12px;border-radius:12px;font-size:13px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.tgl{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.tgl input{width:38px;height:20px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0}
+.day{border:2px solid var(--line);border-radius:12px;padding:10px 0;text-align:center;cursor:pointer;background:#fff;user-select:none}
+.day small{display:block;color:var(--mut);font-size:11px}
+.day.sel{background:var(--ok);border-color:var(--ok);color:#fff}.day.sel small{color:#e6fff6}
+.day.best{outline:3px solid var(--warn)}
+.msg{padding:6px 10px;border-radius:12px;background:#f1ecff;margin:4px 0;max-width:80%}.msg.me{background:var(--ac2);color:#fff;margin-left:auto}
+.hero{background:linear-gradient(120deg,var(--ac2),var(--ac));color:#fff;border-radius:20px;padding:26px;margin-bottom:18px}
+.hero p{opacity:.92;margin:4px 0 14px}
+.hero .btn{background:#fff;color:var(--ac2);margin-right:6px}
+@media(max-width:620px){header{padding:8px 10px}.logo{margin-right:4px}nav a{padding:6px 8px;font-size:13px}main{padding:16px 12px 70px}h1{font-size:23px}.days{gap:3px}}
+</style>
+</head>
+<body>
+<header id="hd"></header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+<script>
+const COL=['#ff5a5f','#7c5cff','#12b886','#f59f00','#339af0','#e64980','#20c997','#845ef7','#fd7e14'];
+const FRIENDS=[['Lena','🦊'],['Marco','🍕'],['Priya','🌸'],['Jonas','🎸'],['Sofia','☀️'],['Tom','🐢'],['Aiko','🍜'],['Nils','🚲']];
+const CATS=['Dinner','Brunch','Birthday','Weekend trip','Day trip','Game night','Movie night','Picnic','Hike','Concert','Festival','Party','Study jam','Other'];
+const VIBES=['Chill','Wild','Cosy','Fancy','Outdoorsy','Foodie','Cultural','Sporty','Spontaneous','Low-key'];
+const PRIV=['Public','Friends of friends','Friends only','Invite only','Secret','Ghost mode'];
+const DRESS=['None','Casual','Smart casual','Cocktail','Themed','Black tie'];
+const BUDG=['€','€€','€€€','€€€€'];
+const NOTIFS=['New plan created','Plan edited','Plan cancelled','Someone joined','Someone left','Someone voted','Poll closed','Poll reminder','Vibe tag reacted','Emoji reacted','New chat message','Chat mention','Playlist song added','Playlist song removed','Expense added','Expense settled','Photo added','Photo comment','Streak at risk','Streak milestone','Friend birthday','Weekly digest','Daily digest','Product tips','Huddle news'];
+let S={v:'huddles',tab:'overview',step:0,menu:false,acct:false,
+ d:{type:'',cover:'',vibes:[],priv:'',dress:'',budget:'',name:''},
+ plans:[{id:1,name:"Anna's birthday dinner",type:'Birthday',members:['Lena','Marco','Priya','Jonas','Sofia','Tom','Aiko','Nils'],views:'Huddle: Friday Crew'},
+        {id:2,name:'Lake weekend',type:'Weekend trip',members:['Lena','Tom','Nils'],views:'Huddle: Friday Crew'}],
+ cur:1,notifs:NOTIFS.map(n=>true),notifCount:3,qp:{mine:[],friends:{Lena:[2,3,5],Marco:[3,5],Priya:[3],Jonas:[1,3,5,6],Sofia:[5,6]},friend:false,name:'',sent:false},
+ invite:{stage:0},chat:[['Lena','are we doing this or not'],['Marco','date??'],['Priya','I can do the 12th or the 19th, maybe'],['Jonas','🔥']],
+ songs:['Dancing Queen (disputed)','Mr. Brightside'],exp:[],streak:2,ai:'',poll:{date:{},place:{},rank:[],emoji:{},vibe:{},budget:null},ver:{n:0,err:''}};
+const $=s=>document.querySelector(s);
+const av=(n,s)=>{const f=FRIENDS.find(x=>x[0]==n);const i=Math.max(0,FRIENDS.findIndex(x=>x[0]==n));return `<span class="av ${s||''}" style="background:${COL[i%9]}" title="${n}">${f?f[1]:n[0]}</span>`};
+function toast(t){const e=document.createElement('div');e.textContent=t;$('#toast').appendChild(e);setTimeout(()=>e.remove(),4200)}
+function go(v,t){S.v=v;S.menu=false;if(t)S.tab=t;if(v=='wizard'){S.step=0}R();scrollTo(0,0)}
+function storm(){const m=['Lena reacted 🔥 to your vibe tag','Marco joined "Lake weekend"','Priya voted in the Budget poll','Jonas added a song to the playlist','Your friendship streak with Tom is at risk! 🔥','Sofia commented on a photo (there are no photos)','Weekly digest: 4 things you might have missed','New: Huddle Pro Insights™ is here'];m.forEach((x,i)=>setTimeout(()=>{toast(x);S.notifCount++;hd()},i*450))}
+function hd(){const n=[['huddles','Huddles'],['plans','Plans'],['events','Events'],['hangouts','Hangouts']];
+$('#hd').innerHTML=`<span class="logo" onclick="go('huddles')">huddle ✦</span><nav>${n.map(a=>`<a class="${S.v==a[0]?'on':''}" onclick="go('${a[0]}')">${a[1]}</a>`).join('')}</nav><span class="sp"></span>
+<button class="btn sm" onclick="go('wizard')">+ New</button><button class="btn sm p2" onclick="go('wizard')">Create plan</button>
+<button class="bell" onclick="go('notifs')">🔔<b>${S.notifCount}</b></button><span onclick="S.menu=!S.menu;R()" style="cursor:pointer">${av('You'.replace('You','Amin'),'')}</span>
+${S.menu?`<div class="menu"><a onclick="go('profile')">👤 My profile</a><a onclick="go('notifs')">🔔 Notifications</a><a onclick="go('settings')">⚙️ Settings</a><a onclick="go('more')">🧰 Labs &amp; extras</a><a onclick="go('help')">❓ Help centre</a><a onclick="S.menu=false;R()">Close</a></div>`:''}`}
+function planCard(p){return `<div class="card" style="cursor:pointer" onclick="S.cur=${p.id};go('plan','overview')"><div class="row"><b>${p.name}</b><span class="tag">${p.type}</span></div><div class="row" style="margin:8px 0">${p.members.slice(0,5).map(m=>av(m,'s')).join('')}<span class="sub" style="margin:0">+${p.members.length-5>0?p.members.length-5:0}</span></div><div class="sub" style="margin:0">Date: not decided · Place: not decided</div></div>`}
+function V_huddles(){return `<div class="hero"><h1>Orchestrate social energy.</h1><p>Huddle is the all-in-one social coordination layer for your people, moments and vibes.</p><button class="btn" onclick="go('wizard')">Start a Huddle</button><button class="btn" onclick="go('wizard')">Plan an Event</button><button class="btn" onclick="go('wizard')">Create a Hangout</button></div>
+<h2>Your Huddles</h2><p class="sub">A Huddle is a group of friends. Inside a Huddle you make Plans. Plans can become Events.</p>
+<div class="grid"><div class="card"><h3>🍻 Friday Crew</h3><p class="sub">8 members · 2 plans</p><button class="btn sm g" onclick="go('plans')">Open plans</button></div>
+<div class="card"><h3>🏠 Flat 4B</h3><p class="sub">4 members · 0 plans</p><div class="empty">Nothing here yet.</div></div>
+<div class="card"><h3>🎓 Uni people</h3><p class="sub">0 members</p><div class="empty">No data.</div></div></div>`}
+function V_plans(){return `<h1>Plans</h1><p class="sub">Everything your Huddles are cooking up.</p>${S.plans.map(planCard).join('')}<div class="row"><button class="btn" onclick="go('wizard')">Create new plan</button><button class="btn o" onclick="go('wizard')">Add event</button></div>`}
+function V_events(){return `<h1>Events</h1><p class="sub">Plans that are happening (or could be).</p><div class="grid">${S.plans.map(planCard).join('')}</div><div class="card"><h3>📆 Calendar sync</h3><p class="sub">Connect your calendar to see events here.</p><button class="btn sm" onclick="toast('Calendar connected ✓')">Connect calendar</button></div>`}
+function V_hangouts(){return `<h1>Hangouts</h1><p class="sub">Casual meetups.</p><div class="empty">Nothing here yet.<br><br><button class="btn" onclick="go('wizard')">Create Hangout</button></div>`}
+const WZ=['Plan type','Cover image','Vibe tags','Privacy level','Dress code','Budget tier'];
+function V_wizard(){const d=S.d,s=S.step;let b='';
+if(s==0)b=`<p class="sub">What kind of plan is this?</p>${CATS.map(c=>`<span class="chip ${d.type==c?'sel':''}" onclick="S.d.type='${c}';R()">${c}</span>`).join('')}<br><br><input type="text" placeholder="Plan name" value="${d.name}" oninput="S.d.name=this.value">`;
+if(s==1)b=`<p class="sub">Choose a cover.</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">${['🌅','🌃','🏖️','🍷','🎉','🏔️','🎲','🌿'].map(c=>`<div class="card chip ${d.cover==c?'sel':''}" style="font-size:44px;text-align:center;margin:0" onclick="S.d.cover='${c}';R()">${c}</div>`).join('')}</div>`;
+if(s==2)b=`<p class="sub">Pick the vibes.</p>${VIBES.map(c=>`<span class="chip ${d.vibes.includes(c)?'sel':''}" onclick="tv('${c}')">${c}</span>`).join('')}`;
+if(s==3)b=`<p class="sub">Who can see this plan?</p>${PRIV.map(c=>`<span class="chip ${d.priv==c?'sel':''}" onclick="S.d.priv='${c}';R()">${c}</span>`).join('')}`;
+if(s==4)b=`<p class="sub">Is there a dress code?</p>${DRESS.map(c=>`<span class="chip ${d.dress==c?'sel':''}" onclick="S.d.dress='${c}';R()">${c}</span>`).join('')}`;
+if(s==5)b=`<p class="sub">Budget tier per person.</p>${BUDG.map(c=>`<span class="chip ${d.budget==c?'sel':''}" onclick="S.d.budget='${c}';R()">${c}</span>`).join('')}`;
+return `<div class="card"><div class="steps">${WZ.map((_,i)=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div><h2>${WZ[s]} <span class="tiny">step ${s+1} of 6</span></h2>${b}${S.wErr?`<div class="err">${S.wErr}</div>`:''}
+<div class="row" style="margin-top:18px"><button class="btn g" onclick="S.step=Math.max(0,S.step-1);S.wErr='';R()">Back</button><span class="sp"></span><button class="btn o" onclick="toast('Draft saved (somewhere)')">Save draft</button><button class="btn" onclick="wnext()">${s==5?'Finish':'Next'}</button></div></div>`}
+function tv(c){const a=S.d.vibes;a.includes(c)?a.splice(a.indexOf(c),1):a.push(c);R()}
+function wnext(){const d=S.d,s=S.step;const need=[d.type,d.cover,d.vibes.length,d.priv,d.dress,d.budget][s];
+if(!need){S.wErr=['You forgot to choose a plan type.','You have to pick a cover. It is not optional.','You must pick at least one vibe. Please read the instructions.','Invalid selection. Choose a privacy level.','You skipped the dress code.','You did not select a budget.'][s];R();return}
+S.wErr='';if(s<5){S.step++;R();return}
+S.plans.push({id:3,name:d.name||'Untitled plan',type:d.type,members:['Amin'],views:''});S.cur=3;S.d={type:'',cover:'',vibes:[],priv:'',dress:'',budget:'',name:''};toast('Plan created! Now invite your friends.');go('plan','overview')}
+function V_plan(){const p=S.plans.find(x=>x.id==S.cur)||S.plans[0];const T=[['overview','Overview'],['polls','Polls'],['invite','Invite'],['chat','Chat'],['playlist','Playlist'],['split','Split'],['album','Album'],['streaks','Streaks'],['ai','✨ AI']];
+const t=S.tab,f={overview:T_over,polls:T_polls,invite:T_inv,chat:T_chat,playlist:T_pl,split:T_split,album:T_album,streaks:T_str,ai:T_ai}[t];
+return `<h1>${p.name}</h1><p class="sub">${p.type} · ${p.members.length} going-ish · ${p.views}</p><div class="tabs">${T.map(a=>`<a class="${t==a[0]?'on':''}" onclick="S.tab='${a[0]}';R()">${a[1]}</a>`).join('')}</div>${f(p)}`}
+function T_over(p){return `<div class="card"><h3>Status</h3><p>Date: <b>TBD</b> · Place: <b>TBD</b> · Budget: <b>${S.d.budget||'€€'}</b></p><div class="row"><button class="btn" onclick="S.tab='polls';R()">Add poll</button><button class="btn p2" onclick="S.tab='invite';R()">Invite friends</button><button class="btn o" onclick="toast('Synced ✓')">Sync to calendar</button><button class="btn g" onclick="storm()">Boost engagement</button></div></div>
+<div class="card"><h3>Members</h3><div class="row">${p.members.map(m=>av(m)).join('')}</div><p class="sub" style="margin-top:8px">3 of 8 have confirmed their account. 5 pending.</p></div>`}
+function T_polls(){const P=S.poll;
+const dates=['Fri 12 Dec','Sat 13 Dec','Fri 19 Dec','Sat 20 Dec'],places=['Trattoria Sole','Burger Barn','Anna\'s flat'];
+const pct=(o,k)=>{const t=Object.values(o).length||1;return Math.round(Object.values(o).filter(x=>x==k).length/t*100)};
+return `<div class="card"><h3>📅 Date poll</h3>${dates.map(d=>`<div class="row"><label style="width:110px"><input type="radio" name="dp" ${P.date.me==d?'checked':''} onclick="S.poll.date.me='${d}';R()"> ${d}</label><div class="bar" style="flex:1"><i style="width:${[40,15,30,15][dates.indexOf(d)]}%"></i></div><span class="tiny">${[40,15,30,15][dates.indexOf(d)]}%</span></div>`).join('')}<span class="tiny">Results update when everyone has voted.</span></div>
+<div class="card"><h3>📍 Place poll</h3>${places.map((d,i)=>`<span class="chip ${P.place.me==d?'sel':''}" onclick="S.poll.place.me=\`${d.replace("'","\\'")}\`;R()">${d} <b>${[3,2,3][i]}</b></span>`).join('')}</div>
+<div class="card"><h3>🥇 Ranked choice</h3><p class="sub">Drag to rank. (Drag not available on this device. Tap in order.)</p>${['Italian','Burgers','Home cooking'].map(x=>`<button class="btn sm g" onclick="S.poll.rank.push('${x}');R()">${x}</button> `).join('')}<p>Your ranking: ${P.rank.join(' › ')||'-'}</p><button class="btn sm" onclick="S.poll.rank=[];R()">Reset</button></div>
+<div class="card"><h3>😎 Emoji vote</h3>${['👍','👎','🤷','🔥','😴'].map(e=>`<button class="btn sm g" onclick="S.poll.emoji.me='${e}';R()" style="font-size:20px;${P.emoji.me==e?'outline:2px solid var(--ac2)':''}">${e}</button> `).join('')}<p class="sub">Is Friday ok? 12 reactions: 5 🔥, 4 🤷, 3 😴</p></div>
+<div class="card"><h3>✨ Vibe check</h3><p class="sub">Rate the energy: ${P.vibe.me||5}/10</p><input type="range" min="1" max="10" value="${P.vibe.me||5}" onchange="S.poll.vibe.me=this.value;R()" style="width:100%"><span class="tiny">Average vibe: 6.4 ± 2.1</span></div>
+<div class="card"><h3>💶 Budget poll</h3><select onchange="S.poll.budget=this.value"><option>Select…</option>${BUDG.map(b=>`<option ${P.budget==b?'selected':''}>${b}</option>`).join('')}</select><button class="btn sm p2" onclick="toast('Vote cast!')">Submit vote</button><button class="btn sm o" onclick="toast('Vote cast!')">Vote</button></div>`}
+function T_inv(){const i=S.invite;
+if(i.stage==0)return `<div class="card"><h3>Invite your friends</h3><p class="sub">Share this link: <b>huddle.example/j/x7Qp2</b></p><div class="row"><button class="btn" onclick="toast('Link copied')">Copy link</button><button class="btn p2" onclick="toast('Opening your contacts…')">Import contacts</button><button class="btn o" onclick="toast('QR generated')">Show QR</button></div><p class="tiny" style="margin-top:12px">Invitees need to create a free Huddle account and verify their email before they can view or vote on plans.</p><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><button class="btn sm g" onclick="S.invite.stage=1;R()">See what your friend sees</button></div>`;
+if(i.stage==1)return `<div class="card" style="max-width:420px"><h3>🎉 Amin invited you to a plan!</h3><p class="sub">Create your account to see it.</p><input type="text" placeholder="Full name"><input type="email" id="em" placeholder="Email"><input type="password" placeholder="Password (12+ chars, 1 symbol, 1 emoji)"><label class="tiny"><input type="checkbox"> I agree to the Terms, Privacy Policy and Social Energy Charter</label><br><button class="btn" style="width:100%;margin-top:10px" onclick="vm()">Sign up</button>${S.ver.err?`<div class="err">${S.ver.err}</div>`:''}</div>`;
+return `<div class="card" style="max-width:420px"><h3>📬 Check your inbox</h3><p class="sub">We sent a 6-digit code. (Demo code: 482913)</p><input type="text" id="cd" placeholder="Code"><button class="btn" onclick="vc()">Verify</button>${S.ver.err?`<div class="err">${S.ver.err}</div>`:''}<p class="tiny">Didn't get it? Check spam. Resend available in 60 s.</p></div>`}
+function vm(){const e=$('#em').value;if(!/^\S+@\S+\.\S+$/.test(e)){S.ver.err='Invalid email. You entered it wrong.';R();return}S.ver.err='';S.invite.stage=2;R()}
+function vc(){if($('#cd').value!='482913'){S.ver.err='Wrong code. You must have mistyped it. Try again.';R();return}S.invite.stage=0;S.ver.err='';toast('Verified! You can now vote. (Finally.)');S.tab='polls';R()}
+function T_chat(){return `<div class="card">${S.chat.map(m=>`<div class="msg ${m[0]=='Me'?'me':''}"><b>${m[0]}</b> ${m[1]}</div>`).join('')}<div class="row" style="margin-top:8px"><input type="text" id="ci" placeholder="Message the plan chat…" style="margin:0;flex:1"><button class="btn sm" onclick="const v=$('#ci').value;if(v){S.chat.push(['Me',v]);R()}">Send</button></div><p class="tiny">Tip: your friends are probably still using the other chat.</p></div>`}
+function T_pl(){return `<div class="card"><h3>🎵 Shared playlist</h3>${S.songs.map(s=>`<div class="tgl">${s}<span>▶️</span></div>`).join('')}<button class="btn sm" onclick="S.songs.push('Song #'+(S.songs.length+1));R()">Add song</button></div>`}
+function T_split(){return `<div class="card"><h3>💸 Split expenses</h3>${S.exp.length?S.exp.map(e=>`<div class="tgl">${e}</div>`).join(''):'<div class="empty">No expenses.</div>'}<button class="btn sm" onclick="S.exp.push('Dinner € '+(20+S.exp.length*13)+' - split 8 ways');R()">Add expense</button></div>`}
+function T_album(){return `<div class="card"><h3>📷 Photo album</h3><div class="empty">Empty.</div><button class="btn sm" onclick="toast('Upload failed: unsupported file. Please try a supported file.')">Upload</button></div>`}
+function T_str(){return `<div class="card"><h3>🔥 Friendship streaks</h3><p style="font-size:34px;margin:6px 0">${S.streak} weeks</p><p class="sub">Keep planning together to keep your streak alive. Tom is waiting.</p><button class="btn sm" onclick="S.streak++;R()">Nudge Tom</button></div>`}
+function T_ai(){return `<div class="card"><h3>✨ Plan your perfect night</h3><p class="sub">Tell our AI your vibe and we'll orchestrate the evening.</p><input type="text" id="aiq" placeholder="e.g. chill but also wild, 8 people, €€"><button class="btn" onclick="S.ai=$('#aiq').value;R()">Generate</button>${S.ai?`<div class="card" style="background:#f6f2ff;margin-top:10px"><b>Your perfect night</b><p>18:00 Sunset mindfulness aperitivo<br>20:00 Immersive dining journey<br>23:00 Silent disco (optional)<br><span class="tiny">Based on: "${S.ai.replace(/</g,'&lt;')}"</span></p></div>`:''}</div>`}
+function V_notifs(){return `<h1>Notifications</h1><div class="row"><button class="btn sm" onclick="storm()">Simulate a busy day</button><button class="btn sm g" onclick="go('settings')">Settings</button></div><br><div class="card">${['Lena reacted 🔥 to your vibe tag','Marco joined "Lake weekend"','Priya voted in the Budget poll','Your friendship streak is at risk','Weekly digest is ready'].map(x=>`<div class="tgl">${x}<span class="tiny">now</span></div>`).join('')}<div class="tgl"><i>+ ${S.notifCount} more</i></div></div>`}
+function V_settings(){return `<h1>Notification settings</h1><p class="sub">Choose how Huddle keeps you in the loop. ${S.notifs.filter(x=>x).length} of 25 on.</p><div class="card">${NOTIFS.map((n,i)=>`<div class="tgl">${n}<input type="checkbox" ${S.notifs[i]?'checked':''} onchange="S.notifs[${i}]=this.checked;R()"></div>`).join('')}</div>`}
+function V_profile(){return `<h1>Amin</h1><p class="sub">No bio yet.</p><div class="empty">You haven't added anything to your profile.</div>`}
+function V_help(){return `<h1>Help centre</h1><div class="card"><h3>How do I vote?</h3><p>Create an account, verify your email, accept the invite, open the plan, open Polls, choose the poll type that applies to you.</p></div><div class="card"><h3>What's the difference between Huddles, Plans, Events and Hangouts?</h3><p>It depends.</p></div>`}
+function V_more(){return `<h1>Labs &amp; extras</h1><p class="sub">Experimental stuff and old things.</p><div class="grid"><div class="card"><h3>🧪 Huddle Labs</h3><p class="sub">Coming soon</p></div><div class="card"><h3>🗄️ Archive</h3><p class="sub">Retired features</p><a class="tag" onclick="go('archive')" style="cursor:pointer">Open archive →</a></div><div class="card"><h3>🧾 Export data</h3><p class="sub">Not available yet</p></div></div>`}
+function V_archive(){return `<h1>Archive</h1><p class="sub">Features we replaced with better ones.</p><div class="card"><div class="tgl">Old plan templates <span class="tiny">2023</span></div><div class="tgl">Group avatars v1 <span class="tiny">2023</span></div><div class="tgl"><a style="cursor:pointer;color:var(--ac2)" onclick="go('quick')">Quick poll (legacy)</a><span class="tiny">2022</span></div></div>`}
+function V_quick(){const q=S.qp,days=[];for(let i=1;i<=14;i++)days.push(i);const nm=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const all=Object.assign({},q.friends);if(q.sent)all[q.name||'Me']=q.mine;else if(!q.friend&&q.mine.length)all['You']=q.mine;
+const cnt=d=>Object.values(all).filter(a=>a.includes(d)).length,best=Math.max(...days.map(cnt));
+const grid=(sel)=>`<div class="days">${days.map(d=>`<div class="day ${q.mine.includes(d)?'sel':''} ${q.sent&&cnt(d)==best&&best>0?'best':''}" onclick="qt(${d})">${nm[(d+3)%7]}<b style="font-size:17px">${d+7}</b><small>Dec</small></div>`).join('')}</div>`;
+const res=`<h3>Who can make it</h3>${days.filter(d=>cnt(d)>0).sort((a,b)=>cnt(b)-cnt(a)).map(d=>`<div class="row" style="margin:6px 0"><b style="width:60px">${nm[(d+3)%7]} ${d+7}</b><span>${cnt(d)} ✓</span> ${Object.keys(all).filter(n=>all[n].includes(d)).map(n=>av(n,'s')).join('')} <span class="tiny">${Object.keys(all).filter(n=>all[n].includes(d)).join(', ')}</span></div>`).join('')}`;
+const bd=days.filter(d=>cnt(d)==best&&best>0).map(d=>nm[(d+3)%7]+' '+(d+7)+' Dec');
+if(q.friend)return `<div class="card" style="max-width:520px;margin:auto"><p class="tiny">Friend view - no account needed</p><h2>Anna's birthday dinner</h2><p class="sub">Amin asks: which days work for you? Tap them.</p><input type="text" placeholder="Your name" value="${q.name}" oninput="S.qp.name=this.value">${grid()}<button class="btn" style="width:100%" onclick="qs()">Done</button>${q.err?`<div class="err">${q.err}</div>`:''}</div>${q.sent?`<div class="card" style="max-width:520px;margin:14px auto"><h2>🎯 Best: ${bd.join(' / ')}</h2>${res}<button class="btn g sm" onclick="S.qp.friend=false;S.qp.sent=false;R()">Back to host view</button></div>`:''}`;
+return `<h1>Quick poll</h1><p class="sub">Tap the days that work for you. Send the link. Done.</p><div class="card">${grid()}<div class="row"><input type="text" readonly value="huddle.example/q/k3n9d" style="flex:1;margin:0"><button class="btn" onclick="toast('Link copied')">Copy link</button><button class="btn g" onclick="S.qp.friend=true;S.qp.sent=false;S.qp.mine=[];R()">Preview as a friend</button></div></div>
+<div class="card">${bd.length?`<h2>🎯 Best so far: ${bd.join(' / ')}</h2>`:''}${res||'<p class="sub">Tap some days to start.</p>'}</div>`}
+function qt(d){const q=S.qp;const a=q.mine;a.includes(d)?a.splice(a.indexOf(d),1):a.push(d);R()}
+function qs(){const q=S.qp;if(!q.name.trim()){q.err='Name is required.';R();return}if(!q.mine.length){q.err='Pick at least one day.';R();return}q.err='';q.sent=true;R();toast('Thanks! Your days were sent.')}
+function R(){hd();$('#app').innerHTML=({huddles:V_huddles,plans:V_plans,events:V_events,hangouts:V_hangouts,wizard:V_wizard,plan:V_plan,notifs:V_notifs,settings:V_settings,profile:V_profile,help:V_help,more:V_more,archive:V_archive,quick:V_quick})[S.v]()}
+R();setTimeout(()=>{toast('Lena reacted 🔥 to your vibe tag');S.notifCount++;hd()},2500);
+</script>
+</body>
+</html>
