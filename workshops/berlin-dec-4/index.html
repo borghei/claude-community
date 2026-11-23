@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make it usable · Claude Community Berlin</title>
+<meta name="description" content="Three apps built in a weekend with AI. Nobody uses them. Pick one and make it something people would actually use.">
+<style>
+  :root{--orange:#D97757;--dark:#141413;--cream:#FAF9F5;--card:#EEEBE3;--grey:#5f5d58}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--dark);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:400}
+  header{background:var(--orange);padding:64px 24px 56px}
+  .wrap{max-width:1040px;margin:0 auto}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cream)}
+  h1{font-size:clamp(44px,7vw,80px);line-height:1.02;margin:14px 0 18px}
+  header p{font-size:20px;max-width:640px;margin:0;color:var(--dark)}
+  main{padding:48px 24px 72px}
+  h2{font-size:34px;margin:56px 0 18px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .card{background:var(--card);border-radius:22px;padding:28px;display:flex;flex-direction:column}
+  .card .emoji{font-size:40px}
+  .card h3{font-size:34px;margin:8px 0 6px}
+  .card .pitch{color:var(--grey);margin:0 0 18px;flex:1}
+  .btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:999px;padding:11px 18px;margin:4px 8px 4px 0}
+  .btn.primary{background:var(--dark);color:var(--cream)}
+  .btn.ghost{border:1.5px solid var(--dark);color:var(--dark)}
+  ol.q{padding-left:0;list-style:none;counter-reset:q;margin:0}
+  ol.q li{counter-increment:q;display:flex;gap:18px;padding:14px 0;border-bottom:1px solid #e2dfd6;font-size:20px}
+  ol.q li::before{content:counter(q);color:var(--orange);font-family:Georgia,serif;font-size:30px;line-height:1;min-width:28px}
+  .tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .track{border:1.5px solid #e2dfd6;border-radius:18px;padding:20px}
+  .track b{display:block;font-size:20px}
+  .track span{color:var(--orange);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .prompt{background:#fff;border:1px solid #e2dfd6;border-radius:16px;padding:18px 20px;margin:12px 0;position:relative}
+  .prompt h4{margin:0 0 6px;color:var(--orange);font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+  .prompt p{margin:0;padding-right:70px}
+  .copy{position:absolute;top:14px;right:14px;border:1px solid var(--dark);background:none;border-radius:999px;padding:4px 12px;font:600 12px inherit;cursor:pointer}
+  .note{color:var(--grey);font-size:15px}
+  footer{padding:32px 24px;border-top:1px solid #e2dfd6;color:var(--grey);font-size:14px}
+  a{color:var(--dark)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">Claude Community Berlin · Workshop with Yasaman Zahiri</div>
+  <h1 class="serif">Make it usable</h1>
+  <p>Three apps, each built in a weekend with AI. They look great. Nobody uses them. Pick one with your team and turn it into something people would actually use.</p>
+</div></header>
+
+<main><div class="wrap">
+  <h2 class="serif">Pick your product</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="emoji">🥕</div>
+      <h3 class="serif">Fridgy</h3>
+      <p class="pitch">"Your AI kitchen co-pilot. Tell it what's in your fridge, get dinner."</p>
+      <div><a class="btn primary" href="fridgy/">Open the app</a><a class="btn ghost" href="https://github.com/borghei/claude-community/tree/main/workshops/berlin-dec-4/fridgy">Get the code</a></div>
+    </div>
+    <div class="card">
+      <div class="emoji">🧭</div>
+      <h3 class="serif">Wanderly</h3>
+      <p class="pitch">"Plan your dream trip in seconds with AI."</p>
+      <div><a class="btn primary" href="wanderly/">Open the app</a><a class="btn ghost" href="https://github.com/borghei/claude-community/tree/main/workshops/berlin-dec-4/wanderly">Get the code</a></div>
+    </div>
+    <div class="card">
+      <div class="emoji">🫶</div>
+      <h3 class="serif">Huddle</h3>
+      <p class="pitch">"Plan anything with your friends. Dinners, trips, birthdays, finally organised."</p>
+      <div><a class="btn primary" href="huddle/">Open the app</a><a class="btn ghost" href="https://github.com/borghei/claude-community/tree/main/workshops/berlin-dec-4/huddle">Get the code</a></div>
+    </div>
+  </div>
+  <p class="note">All three apps are fictional and made on purpose for this workshop. Nothing you type is sent anywhere.</p>
+
+  <h2 class="serif">Five questions before you build</h2>
+  <ol class="q">
+    <li>Who is it for? One specific person, not "everyone".</li>
+    <li>What problem do they have today, and how do they solve it now?</li>
+    <li>What is the one thing the product must do well?</li>
+    <li>What can we cut, so that one thing shines?</li>
+    <li>How will we know it works?</li>
+  </ol>
+
+  <h2 class="serif">Pick your track</h2>
+  <div class="tracks">
+    <div class="track"><span>No code</span><b>Starter</b>Use Claude chat. Paste screenshots, ask questions, sketch the new first screen on paper.</div>
+    <div class="track"><span>Some tech</span><b>Builder</b>Ask Claude to build a clickable prototype of your new, focused flow.</div>
+    <div class="track"><span>You code</span><b>Expert</b>Download the code and use Claude Code to rebuild the app around its one core job.</div>
+  </div>
+
+  <h2 class="serif">Prompts to steal</h2>
+  <div class="prompt"><h4>Find the user</h4><p>Act as an experienced product manager. Here is an app: [paste screenshots or describe it]. Ask me 5 questions, one at a time, to find out who this app is really for and what problem it solves for them.</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>Be the user</h4><p>Play [the person we picked]. I will interview you about how you handle this problem today. Answer honestly, including what annoys you.</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>Keep, cut, change</h4><p>Here are the app's features: [list]. Our user is [one sentence]. Sort every feature into Must have, Nice to have and Won't have, with one reason each. Be ruthless: at most 2 must-haves.</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>First 10 seconds</h4><p>A friend just sent you this app. Here is a screenshot. Think out loud: what do you understand in the first 10 seconds, what would you tap, and what would make you close it?</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>Prototype it</h4><p>Build a simple clickable prototype of only this flow: [your flow]. One main action per screen, plain language, and a 2-step onboarding with a skip button.</p><button class="copy">Copy</button></div>
+  <div class="prompt"><h4>Rebuild it (Claude Code)</h4><p>This folder has the app's index.html. Turn it into a focused app for [user] doing [job]. Remove everything else, make that job the home screen, and add a skippable 2-step onboarding.</p><button class="copy">Copy</button></div>
+
+  <h2 class="serif">Demo time: 2 minutes per team</h2>
+  <p>At the end, every team demos what they made. A paper sketch, a prototype or a rebuilt app all count.</p>
+  <ol class="q">
+    <li>Who is it for, in one sentence</li>
+    <li>What problem it solves for them</li>
+    <li>What you cut, and why</li>
+    <li>Demo your output: the new first screen, prototype or app</li>
+  </ol>
+
+  <p class="note" style="margin-top:40px">Need your API credits or help setting up your key? <a href="https://github.com/borghei/claude-berlin-api-credits">Follow the credits guide</a>.</p>
+</div></main>
+
+<footer><div class="wrap">Claude Community Berlin · Claude Workshop x The Delta · 4 December 2026</div></footer>
+<script>
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(b.previousElementSibling.innerText);b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500);}catch(e){}
+}));
+</script>
+</body>
+</html>
